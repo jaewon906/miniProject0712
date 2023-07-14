@@ -82,7 +82,7 @@ export default function BoardMain(){
                         let yyyy = "";
                         let MM ="";
                         let dd = "";
-
+                        console.log(el);
                         try{
                             yyyy = el.boardCreatedTime.substring(0,5);
                             MM = el.boardCreatedTime.substring(5,8);
@@ -98,7 +98,8 @@ export default function BoardMain(){
                                 <div style={{width:"20%"}}>{el.author}</div>
                                 <div style={{width:"11%"}}>{yyyy+MM+dd}</div>
                                 <div style={{width:"10%"}}>{el.hit}</div>
-                                <div style={{width:"10%"}}>{el.like}</div>
+                                <div style={{width:"10%"}}>{el.boardLikes}</div>
+
                             </div>
                         )
                     })}

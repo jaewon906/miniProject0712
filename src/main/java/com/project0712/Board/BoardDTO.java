@@ -31,6 +31,7 @@ public class BoardDTO {
         boardDTO.setAuthor(boardEntity.getAuthor());
         boardDTO.setHit(boardEntity.getHit());
         boardDTO.setBoardLikes(boardEntity.getBoardLikes());
+
         boardDTO.setBoardCreatedTime(boardEntity.getCreatedTime());
         boardDTO.setBoardUpdatedTime(boardEntity.getUpdatedTime());
 
