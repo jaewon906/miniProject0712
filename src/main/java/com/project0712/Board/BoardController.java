@@ -25,11 +25,8 @@ public class BoardController {
 
     @PostMapping("api/board/write") // MultiValueMap으로 사용할 수도 있다.
     public String write(BoardDTO board) {
-        System.out.println("board = " + board.getCategory());
-        System.out.println("board = " + board.getTitle());
-        System.out.println("board = " + board.getContent());
         boardServiceImpl.save(board);
-
         return "redirect:/board";
     }
+
 }

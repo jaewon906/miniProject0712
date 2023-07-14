@@ -21,9 +21,8 @@
     border: 1px solid #7fb6ff;
     display: flex;
 }
-a{
+.category > a{
     width: 25%;
-    height:100%;
     text-decoration: none;
     transition: background-color 0.3s, color 0.3s;
     color: black;
@@ -98,7 +97,7 @@ a{
 .list{
     width:100%;
     height:40px;
-    border-top:1px solid gray;
+    border-bottom:1px solid gray;
     line-height: 40px;
     display: flex;
 }
@@ -108,10 +107,12 @@ a{
     align-items: center;
 }
 .list > div> a{
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.list > div> a:hover{
+    color: #ff0099;
 }
 .no_title_author_time{
     width:90%;

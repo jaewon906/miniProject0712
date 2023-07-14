@@ -3,18 +3,29 @@ import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 import {useEffect, useState} from "react";
 export default function BoardMain(){
-    const {urlParams} = useParams();
+    const urlParams = useParams();
 
     const selectList=[10, 30, 50, 100]
     const [boardListAmount, setBoardListAmount] = useState([{}]);
     const [getBoard, setGetBoard] = useState([]);
-    const [categoryLink, setCategoryLink] = useState();
-
+    const [categoryTemp,setCategoryTemp] = useState("");
+    let sortedList=[{}];
+    let i=0
+    let j=0;
     useEffect(()=>{
         axios.get("/api/board")
             .then(res=>  setGetBoard(res.data))
             .catch(err => console.log(err))
-    },[])
+
+        switch(urlParams.id){
+            case "1": setCategoryTemp("자유게시판");break;
+            case "2": setCategoryTemp("공략게시판");break;
+            case "3": setCategoryTemp("공부게시판");break;
+            case "4": setCategoryTemp("꿀팁게시판");break;
+            default:setCategoryTemp("전체게시글")
+        }
+    },[urlParams.id])
+
     const boardAmount = (e) =>{ // 게시글 개수 조절
          setBoardListAmount(e.target.value);
         axios.post("/api/board",)
@@ -22,19 +33,18 @@ export default function BoardMain(){
              .catch(err => console.log(err))
 
     }
-
     const setCategory =() =>{
     }
 
     return(
         <div className={style.container}>
             <div className={style.main}>
-                <h1>전체 게시글</h1>
+                <h1>{categoryTemp}</h1>
                 <div className={style.category}>
-                    <Link to="category=/1"><div>자유게시판</div></Link>
-                    <Link to="category=/2"><div>공략게시판</div></Link>
-                    <Link to="category=/3"><div>공부게시판</div></Link>
-                    <Link to="category=/4"><div>꿀팁게시판</div></Link>
+                    <Link to="/board/category/1"><div>자유게시판</div></Link>
+                    <Link to="/board/category/2"><div>공략게시판</div></Link>
+                    <Link to="/board/category/3"><div>공부게시판</div></Link>
+                    <Link to="/board/category/4"><div>꿀팁게시판</div></Link>
                 </div>
                 <div className={style.boardListAll_header}>
                     <input type={"text"} className={style.find} placeholder={"검색어를 입력하세요"}/>
@@ -58,28 +68,42 @@ export default function BoardMain(){
                 </div>
 
                 <div className={style.boardListAll}>
+
                     {getBoard.map(el=>{
-                        const yyyy = el.boardCreatedTime.substring(0,5);
-                        const MM = el.boardCreatedTime.substring(5,8);
-                        const dd = el.boardCreatedTime.substring(8,10);
+
+                        if(categoryTemp==="전체게시글"){
+                            sortedList[i++]=el;
+                        }
+                        if(categoryTemp===el.category){
+                            sortedList[j++]=el;
+                        }
+                    })}
+                    {sortedList.map(el=>{
+                        let yyyy = "";
+                        let MM ="";
+                        let dd = "";
+
+                        try{
+                            yyyy = el.boardCreatedTime.substring(0,5);
+                            MM = el.boardCreatedTime.substring(5,8);
+                            dd = el.boardCreatedTime.substring(8,10);
+                        }
+                        catch (e){
+                        }
+
                         return(
-                            <div className={style.list}>
-                                <div style={{width:"5%"}}>{el.id}</div>
-                                <div style={{width:"45%"}}><Link to={"/"+el.category}>{el.title}</Link></div>
+                            <div className={style.list} key={el.id}>
+                                <div style={{width:"4%"}}>{el.id}</div>
+                                <div style={{width:"45%"}}><Link to={"No="+urlParams.id}>{el.title}</Link></div>
                                 <div style={{width:"20%"}}>{el.author}</div>
-                                <div style={{width:"10%"}}>{yyyy+MM+dd}</div>
+                                <div style={{width:"11%"}}>{yyyy+MM+dd}</div>
                                 <div style={{width:"10%"}}>{el.hit}</div>
                                 <div style={{width:"10%"}}>{el.like}</div>
                             </div>
                         )
                     })}
-                    {/*{result1.map(el=>{*/}
-                    {/*    return(*/}
-                    {/*        <h1 key={el.key}>{el.value}</h1>*/}
-                    {/*    )*/}
-                    {/*})}*/}
                 </div>
-               <Link to="write/"><button className={style.toWriteBtn}  type="button">글쓰기</button></Link>
+               <Link to="/write"><button className={style.toWriteBtn}  type="button">글쓰기</button></Link>
             </div>
         </div>
     )

@@ -1,15 +1,15 @@
 import style from "../css/boardWrite.module.css"
 import axios from "axios"
-import {useRef} from "react";
+import {useRef, useState} from "react";
 export default function BoardWrite(){
     const ref1 = useRef(),
-          ref2 = useRef(),
           ref3 = useRef();
-    const categories=["자유게시판", "공략게시판", "공부게시판", "꿀팁게시판"]
+    const categories=["자유게시판", "공략게시판", "공부게시판", "꿀팁게시판"];
+    let i=0;
+    const [category, setCategory1]=useState("자유게시판");
 
     const toSubmit=()=>{ // 글 저장을 위한 함수
         const title = ref1.current.value,
-              category = ref2.current.value,
               content = ref3.current.value,
               ret = window.confirm("등록하시겠습니까?")
 
@@ -36,6 +36,10 @@ export default function BoardWrite(){
         }
     }
 
+    const selectCategory=(val)=>{
+        setCategory1(val);
+    }
+
     return(
         <div className={style.container}>
             <div className={style.main}>
@@ -44,11 +48,12 @@ export default function BoardWrite(){
                     <div className={style.title}>
                         <p>제목 :</p> <textarea placeholder="제목을 입력해주세요" ref={ref1}></textarea>
                     </div>
-                    <select>
+                    <select onChange={(e)=>selectCategory(e.target.value)}>
                         {categories.map(el=>{
                             return(
-                                <option ref={ref2} key={el} value={el}>{el}</option>
+                                <option key={el} value={el}>{el}</option>
                             )
+
                         })}
                     </select>
                 </div>

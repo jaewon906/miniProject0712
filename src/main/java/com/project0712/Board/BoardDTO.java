@@ -15,8 +15,8 @@ public class BoardDTO {
     private String category; // 게시글 카테고리
     private String content; // 게시글 내용
     private String author; // 작성자
-    private String hit; // 조회수
-    private String boardLikes; //좋아요
+    private int hit; // 조회수
+    private int boardLikes; //좋아요
 
     private LocalDateTime boardCreatedTime;
     private LocalDateTime boardUpdatedTime;
@@ -31,8 +31,8 @@ public class BoardDTO {
         boardDTO.setAuthor(boardEntity.getAuthor());
         boardDTO.setHit(boardEntity.getHit());
         boardDTO.setBoardLikes(boardEntity.getBoardLikes());
-        boardDTO.setBoardCreatedTime(boardEntity.getBoardCreatedTime());
-        boardDTO.setBoardUpdatedTime(boardEntity.getBoardUpdatedTime());
+        boardDTO.setBoardCreatedTime(boardEntity.getCreatedTime());
+        boardDTO.setBoardUpdatedTime(boardEntity.getUpdatedTime());
 
         return  boardDTO;
     }

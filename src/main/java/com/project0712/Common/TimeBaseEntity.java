@@ -1,4 +1,4 @@
-package com.project0712.Board;
+package com.project0712.Common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 public class TimeBaseEntity {
     @CreationTimestamp // 해당 데이터를 테이블에 적용했을 때 시간을 자동으로 생성해준다
     @Column(updatable = false) // 게시판 생성시에만 시간을 생성
-    private LocalDateTime boardCreatedTime;
+    private LocalDateTime CreatedTime;
 
     @CreationTimestamp
     @Column(insertable = false) // 게시판 업데이트 시에만 데이터 수정
-    private LocalDateTime boardUpdatedTime;
+    private LocalDateTime UpdatedTime;
 }

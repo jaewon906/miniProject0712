@@ -1,0 +1,94 @@
+.container{
+    width:100vw;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
+
+.main{
+    width:450px;
+    height:700px;
+    border: 1px solid #7fb6ff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.main > button{
+    width: 200px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #7fb6ff;
+    border:none;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+    margin-top: 30px;
+}
+.main > button:hover{
+    transform: scale(1.1);
+    background-color: #e78dfd;
+}
+.main >.findAndSignUpArea> a{
+    font-size: 12px;
+
+}
+.main > div {
+    width:63%;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    margin-top: 20px;
+
+}
+.main > div > div{
+    width:50%;
+    height:100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.main >div>input{
+    width:210px;
+    height:30px;
+}
+.main > div:nth-child(4)>div>input:nth-child(1){
+    width:70px;
+    height:25px;
+}
+.main > div:nth-child(4)>div>input:nth-child(2){
+    width:120px;
+    height:25px;
+}
+.main > div:nth-child(5)>div>input:nth-child(1){
+    width:63px;
+    height:25px;
+}.main > div:nth-child(5)>div>input:nth-child(2){
+    width:63px;
+    height:25px;
+}
+.main > div:nth-child(5)>div>input:nth-child(3){
+    width:63px;
+    height:25px;
+}
+.findAndSignUpArea{
+    margin-top: 50px;
+    width:70%;
+    height:50px;
+    display: flex;
+    justify-content: space-between;
+}
+input:focus{
+    outline:1px solid #7fb6ff;
+    text-align: left;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

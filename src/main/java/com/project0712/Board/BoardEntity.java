@@ -1,5 +1,6 @@
 package com.project0712.Board;
 
+import com.project0712.Common.TimeBaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,19 +12,19 @@ import lombok.Setter;
 public class BoardEntity extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; //pk
     @Column(nullable = false)
     private String title; //게시글 제목
-    @Column
+    @Column(nullable = false)
     private String category; // 게시글 카테고리
     @Column(nullable = false)
     private String content; // 게시글 내용
     @Column
     private String author; // 작성자
     @Column
-    private String hit; // 조회수
+    private int hit; // 조회수
     @Column
-    private String boardLikes; //좋아요
+    private int boardLikes; //좋아요
 
     public static BoardEntity DTOtoEntity(BoardDTO boardDTO) {
         BoardEntity boardEntity = new BoardEntity();
