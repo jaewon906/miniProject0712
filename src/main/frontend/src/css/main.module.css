@@ -1,0 +1,35 @@
+.container{
+    width: 100vw;
+    height: 1000px;
+    min-width: 1000px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.main{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid red;
+}
+.main > a{
+    width: 100px;
+    height: 40px;
+}
+.entranceBtn {
+    width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #7fb6ff;
+    border:none;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+
+}
+.entranceBtn:hover{
+    transform: scale(1.1);
+    background-color: #e78dfd;
+}
