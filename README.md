@@ -8,11 +8,11 @@
 
 ## backend
 
-#### springFramework
+#### springFramework(spring security), redis, JWT,  
 
 ## 기능
 
-### 1. 회원 가입 o
+### 1. 회원 가입 & 로그인 o
 ### 2. 아이디 비밀번호 찾기
 ### 3. 회원 탈퇴
 ### 4. 게시글 등록 o

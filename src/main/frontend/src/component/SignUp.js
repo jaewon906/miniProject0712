@@ -1,9 +1,9 @@
-import style from '../css/login.module.css'
+import style from '../css/signUp.module.css'
 import {Link} from "react-router-dom";
 import axios from "axios";
 import {useRef, useState} from "react";
 
-export default function Login() {
+export default function SignUp() {
 
     const id = useRef();
     const password = useRef();

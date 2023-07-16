@@ -6,5 +6,7 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     List<MemberEntity> findAllByuserId(String userId); //find search 차이점 : find는 대소문자 구분 o, 와일드카드 문자 사용 x / search는 반대
+    Optional<MemberEntity> findByuserId(String userId); //find search 차이점 : find는 대소문자 구분 o, 와일드카드 문자 사용 x / search는 반대
 
+    void deleteAllByUserId(String userId);
 }
