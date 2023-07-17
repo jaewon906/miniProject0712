@@ -1,5 +1,6 @@
 package com.project0712.Board;
 
+import com.project0712.Member.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +19,24 @@ public class BoardController {
         return boardServiceImpl.findAll();
     }
 
-    @GetMapping("api/board/write")
-    public BoardDTO writeForm(BoardDTO board) {
-        return board;
+    @GetMapping("/api/board/write")
+    public BoardDTO writeForm(BoardDTO boardDTO) {
+        return boardServiceImpl.findSpecificPost(boardDTO);
     }
 
-    @PostMapping("api/board/write") // MultiValueMap으로 사용할 수도 있다.
+    @PostMapping("/api/board/write") // MultiValueMap으로 사용할 수도 있다.
     public String write(BoardDTO board) {
         boardServiceImpl.save(board);
         return "redirect:/board";
     }
 
+    @GetMapping("/api/board/browsePost")
+    public BoardDTO browse(BoardDTO boardDTO) { // 특정 게시글 불러오기
+        return boardServiceImpl.findSpecificPost(boardDTO);
+    }
+
+    @GetMapping("/api/board/searchResult")
+    public List<BoardDTO> search(BoardDTO boardDTO){
+        return boardServiceImpl.search(boardDTO);
+    }
 }

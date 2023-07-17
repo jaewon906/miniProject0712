@@ -17,16 +17,16 @@ export default function LogIn() {
         })
             .then(res => setMyAccount(res.data))
             .catch(err => console.error(err))
+        try { //현재 로그인 버튼을 두 번 눌러야 되는 상황
+            const sessionStorage = window.sessionStorage
+            sessionStorage.setItem("ID", myAccount.userId);
 
-
-        try{ //현재 로그인 버튼을 두 번 눌러야 되는 상황
-            if (myAccount.id!==null) {
+            if (myAccount.id !== null) {
                 window.location.href = "/"
             } else {
                 alert("아이디 또는 비밀번호가 잘못되었습니다.")
             }
-        }
-        catch(e){
+        } catch (e) {
         }
     }
 

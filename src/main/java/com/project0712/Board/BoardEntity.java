@@ -13,11 +13,11 @@ public class BoardEntity extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //pk
-    @Column(nullable = false)
+    @Column(nullable = false,length = 100)
     private String title; //게시글 제목
     @Column(nullable = false)
     private String category; // 게시글 카테고리
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String content; // 게시글 내용
     @Column
     private String author; // 작성자

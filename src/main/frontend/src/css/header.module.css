@@ -1,0 +1,28 @@
+.header{
+    width: 100vw;
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.header > div:nth-child(1){
+    width: 30%;
+    height:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}.header > div:nth-child(2){
+     width: 30%;
+     height:100%;
+     display: flex;
+     justify-content: end;
+     align-items: center;
+
+ }
+.header >div> a{
+    transition: color 0.3s;
+}
+.header >div> a:hover{
+    color:red;
+}

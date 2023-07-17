@@ -5,6 +5,7 @@ import BoardWrite from "./component/BoardWrite";
 import SignUp from "./component/SignUp";
 import LogIn from "./component/LogIn";
 import Withdrawal from "./component/Withdrawal";
+import BoardContent from "./component/BoardContent";
 function App() {
   return (
    <Routes>
@@ -13,10 +14,11 @@ function App() {
            <Route path="/signUp" element={<SignUp/>}/>
            <Route path="/logIn" element={<LogIn/>}/>
            <Route path="/withdrawal" element={<Withdrawal/>}/>
-           <Route path="write/" element={<BoardWrite/>}/>
+           <Route path="write/:id" element={<BoardWrite/>}/>
            <Route path="board/" element={<BoardMain/>}/>
            <Route path="board/" element={<Outlet/>}>
                <Route path="/board/category/:id" element={<BoardMain/>}/>
+               <Route path="/board/:id" element={<BoardContent/>}/>
            </Route>
        </Route>
    </Routes>

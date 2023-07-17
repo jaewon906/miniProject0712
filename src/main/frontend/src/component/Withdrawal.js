@@ -23,12 +23,13 @@ export default function Withdrawal(){
                 .catch(err => console.error(err))
                 .finally(el => {
                     try{
-                        console.log(myAccount)
-                        if(myAccount.id===null){
+                        console.log(myAccount.length)
+                        if(myAccount.id===undefined){
                             alert("아이디 또는 비밀번호가 다릅니다.")
                         }
                         else{
                             alert("그동안 이용해주셔서 감사합니다.")
+                            // window.location.href="/"
                         }
                     }catch (e) {
 

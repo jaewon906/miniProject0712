@@ -21,6 +21,18 @@ public class MemberController {
     public MemberDTO sendMemberInfoToFrontend(MemberDTO memberDTO) {
         return memberDTO;
     }
+    @GetMapping("/api/signUp/id")
+    public String validateId(MemberDTO memberDTO) {
+        return memberServiceImpl.validateDuplicatedId(memberDTO);
+    }
+    @GetMapping("/api/signUp/nickname")
+    public String validateNickname(MemberDTO memberDTO) {
+        return memberServiceImpl.validateDuplicatedNickname(memberDTO);
+    }
+    @GetMapping("/api/signUp/email")
+    public String validateEmail(MemberDTO memberDTO) {
+        return memberServiceImpl.validateDuplicatedEmail(memberDTO);
+    }
 
     @GetMapping("/api/logIn") // 로그인
     public MemberDTO logInForm(MemberDTO memberDTO) {
@@ -28,7 +40,10 @@ public class MemberController {
     }
 
     @PostMapping("/api/withdrawal")
-    public void withdrawal(MemberDTO memberDTO){
+    public void withdrawal(MemberDTO memberDTO) {
         memberServiceImpl.withdrawal(memberDTO);
     }
+
+
+
 }

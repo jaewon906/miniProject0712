@@ -8,7 +8,7 @@
 }
 
 .main{
-    width:450px;
+    width:550px;
     height:700px;
     border: 1px solid #7fb6ff;
     border-radius: 20px;
@@ -57,22 +57,25 @@
     width:210px;
     height:30px;
 }
-.main > div:nth-child(4)>div>input:nth-child(1){
+.main >div>button{
+    font-size: 12px;
+}
+.main > div:nth-child(6)>div>input:nth-child(1){
     width:70px;
     height:25px;
 }
-.main > div:nth-child(4)>div>input:nth-child(2){
+.main > div:nth-child(6)>div>input:nth-child(2){
     width:120px;
     height:25px;
 }
-.main > div:nth-child(5)>div>input:nth-child(1){
+.main > div:nth-child(8)>div>input:nth-child(1){
     width:63px;
     height:25px;
-}.main > div:nth-child(5)>div>input:nth-child(2){
+}.main > div:nth-child(8)>div>input:nth-child(2){
     width:63px;
     height:25px;
 }
-.main > div:nth-child(5)>div>input:nth-child(3){
+.main > div:nth-child(8)>div>input:nth-child(3){
     width:63px;
     height:25px;
 }
