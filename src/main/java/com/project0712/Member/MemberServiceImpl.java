@@ -15,7 +15,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public void withdrawal(MemberDTO memberDTO) { //회원 탈퇴
+    public boolean withdrawal(MemberDTO memberDTO) { //회원 탈퇴
         MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
         Optional<MemberEntity> allByUserId = memberRepository.findByuserId(memberEntity.getUserId());
 
@@ -23,10 +23,11 @@ public class MemberServiceImpl implements MemberService {
             // No EntityManager with actual transaction available for current thread 에러 -> @Transactional 어노테이션 붙히면 해결
             if (memberDTO.getUserPassword().equals(allByUserId.get().getUserPassword())) {
                 memberRepository.deleteAllByUserId(allByUserId.get().getUserId());
+                return true;
             }
 
         }
-
+        return false;
     }
 
     @Override

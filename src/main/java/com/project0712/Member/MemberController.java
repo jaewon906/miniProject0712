@@ -39,9 +39,9 @@ public class MemberController {
         return memberServiceImpl.logIn(memberDTO);
     }
 
-    @PostMapping("/api/withdrawal")
-    public void withdrawal(MemberDTO memberDTO) {
-        memberServiceImpl.withdrawal(memberDTO);
+    @PostMapping("/api/withdrawal") // 회원삭제
+    public boolean withdrawal(MemberDTO memberDTO) {
+       return memberServiceImpl.withdrawal(memberDTO);
     }
 
 

@@ -5,7 +5,7 @@ public interface MemberService {
 
     MemberDTO logIn(MemberDTO memberDTO);
 
-    void withdrawal(MemberDTO memberDTO);
+    boolean withdrawal(MemberDTO memberDTO);
 
     String validateDuplicatedId(MemberDTO memberDTO);
     String validateDuplicatedNickname(MemberDTO memberDTO);

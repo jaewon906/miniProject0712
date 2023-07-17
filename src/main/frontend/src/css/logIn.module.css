@@ -40,6 +40,9 @@
     font-size: 12px;
     margin-top: 20px;
 }
+.main > div>p{
+    margin-right: 75px;
+}
 .main > div:nth-child(1){
     margin-top: 100px;
 }
