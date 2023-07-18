@@ -111,8 +111,8 @@ export default function SignUp() {
 
                 <button onClick={toSignUp} type="button">회원가입</button>
                 <div className={style.findAndSignUpArea}>
-                    <Link to="/findMyAcoount">ID / PW 찾기</Link>
-                    <Link to="/signUp">회원가입 하기</Link>
+                    <Link to="/findId">아이디 찾기</Link>
+                    <Link to="/findPw">비밀번호 찾기</Link>
                 </div>
             </div>
         </div>

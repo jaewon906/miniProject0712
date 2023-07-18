@@ -1,10 +1,10 @@
 package com.project0712.Member;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -21,14 +21,17 @@ public class MemberController {
     public MemberDTO sendMemberInfoToFrontend(MemberDTO memberDTO) {
         return memberDTO;
     }
+
     @GetMapping("/api/signUp/id")
     public String validateId(MemberDTO memberDTO) {
         return memberServiceImpl.validateDuplicatedId(memberDTO);
     }
+
     @GetMapping("/api/signUp/nickname")
     public String validateNickname(MemberDTO memberDTO) {
         return memberServiceImpl.validateDuplicatedNickname(memberDTO);
     }
+
     @GetMapping("/api/signUp/email")
     public String validateEmail(MemberDTO memberDTO) {
         return memberServiceImpl.validateDuplicatedEmail(memberDTO);
@@ -41,9 +44,12 @@ public class MemberController {
 
     @PostMapping("/api/withdrawal") // 회원삭제
     public boolean withdrawal(MemberDTO memberDTO) {
-       return memberServiceImpl.withdrawal(memberDTO);
+        return memberServiceImpl.withdrawal(memberDTO);
     }
 
-
+    @PostMapping("/api/findPw/modifyPassword")
+    public void forgotAndModifyPassword(MemberDTO memberDTO) {
+        memberServiceImpl.forgotAndModifyPassword(memberDTO);
+    }
 
 }

@@ -1,7 +1,5 @@
 package com.project0712.Board;
 
-import com.project0712.Member.MemberDTO;
-import com.project0712.Member.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +39,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<BoardDTO> search(BoardDTO boardDTO) { //게시글 검색해서 찾기
-        List<BoardDTO> boardDTOList = new ArrayList<BoardDTO>();
+        List<BoardDTO> boardDTOList = new ArrayList<>();
         BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
 
         //containing = like 역할, ignoreCase = 대소문자 구분 x
@@ -53,4 +51,5 @@ public class BoardServiceImpl implements BoardService {
         }
         return boardDTOList;
     }
+
 }

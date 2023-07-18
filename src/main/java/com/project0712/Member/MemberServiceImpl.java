@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,6 @@ import java.util.Optional;
 @Transactional
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
-
 
     @Override
     public boolean withdrawal(MemberDTO memberDTO) { //회원 탈퇴
@@ -85,6 +85,38 @@ public class MemberServiceImpl implements MemberService {
         if(byuserEmail.isPresent()) return "이메일이 중복됩니다.";
 
         return null;
+    }
+
+    @Override
+    public String findEmail(MemberDTO memberDTO) {
+        Optional<MemberEntity> byuserEmail = memberRepository.findByuserEmail(memberDTO.getUserEmail());
+
+        //해당하는 이메일이 존재한다면
+        //이메일 보내기 기능을 담당하는 곳에 이메일 주소를 리턴함
+        return byuserEmail.map(MemberEntity::getUserEmail).orElse(null);
+    }
+
+    @Override
+    public List<String> findIdAndEmail(MemberDTO memberDTO) {
+        List<String> idAndEmail = new ArrayList<>();
+        Optional<MemberEntity> byuserId = memberRepository.findByuserId(memberDTO.getUserId());
+
+        if(byuserId.isPresent()){
+            if(byuserId.get().getUserEmail().equals(memberDTO.getUserEmail())){
+                idAndEmail.add(byuserId.get().getUserId());
+                idAndEmail.add(byuserId.get().getUserEmail());
+                return idAndEmail;
+            }
+            else return null;
+        }
+
+        return null;
+    }
+
+    @Override
+    public void forgotAndModifyPassword(MemberDTO memberDTO) {
+        MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
+        memberRepository.save(memberEntity);
     }
 }
 

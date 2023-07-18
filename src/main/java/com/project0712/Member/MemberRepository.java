@@ -1,7 +1,6 @@
 package com.project0712.Member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
@@ -10,4 +9,5 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     Optional<MemberEntity> findByuserEmail(String userEmail);
 
     void deleteAllByUserId(String userId);
+
 }

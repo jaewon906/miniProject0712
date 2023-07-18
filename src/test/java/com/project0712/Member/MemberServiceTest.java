@@ -1,19 +1,14 @@
 package com.project0712.Member;
 
-import com.project0712.Board.BoardDTO;
-import com.project0712.Board.BoardEntity;
+
 import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.AbstractStringAssert;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest

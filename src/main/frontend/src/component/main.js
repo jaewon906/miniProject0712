@@ -1,11 +1,11 @@
 import style from "../css/main.module.css"
-import {Link} from "react-router-dom";
 export default function Main() {
 
     const toLogIn=()=>{
         const sessionStorage = window.sessionStorage
         const getID = sessionStorage.getItem("ID")
-        if(getID.length===0){
+        console.log(getID)
+        if(getID===null){
             const ret = window.confirm("로그인 서비스입니다. 로그인 하시겠습니까?")
             if(ret){
 
