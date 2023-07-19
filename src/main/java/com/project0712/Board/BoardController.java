@@ -17,6 +17,7 @@ import java.util.List;
 public class BoardController {
     private final BoardServiceImpl boardServiceImpl;
 
+    @Deprecated(since = "paging()으로 대체되었습니다.")
     @GetMapping("api/board") // 모든 글 불러오기
     public List<BoardDTO> loadBoardListAll() {
         return boardServiceImpl.findAll();
@@ -49,17 +50,15 @@ public class BoardController {
         return boardServiceImpl.search(boardDTO);
     }
 
-    @PostMapping("/api/board/deletePost")
+    @PostMapping("/api/board/deletePost") //게시글 삭제
     public void deletePost(BoardDTO boardDTO) { // 게시글 삭제
         boardServiceImpl.deletePost(boardDTO);
     }
 
-    @GetMapping("/api/board/paging")
+    @GetMapping("/api/board/paging") // 페이징 기능 + 게시판 들어갈 때 자동으로 게시글 띄움
     public Page<BoardDTO> paging(@PageableDefault(value = 1) Pageable pageable, BoardDTO boardDTO) {
         int pageNum = boardDTO.getPageNum();
         Page<BoardDTO> pagingList = boardServiceImpl.paging(pageable, pageNum);
-
-
         int blockLimit = 10; //하단 페이지 번호 개수
         int startPage = (((int)Math.ceil((double)pageable.getPageNumber() / blockLimit))-1) * blockLimit + 1;
         int endPage = ((startPage - blockLimit -1) < pagingList.getTotalPages()) ? startPage + blockLimit -1 :pagingList.getTotalPages();

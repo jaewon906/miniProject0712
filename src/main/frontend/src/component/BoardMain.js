@@ -7,20 +7,25 @@ export default function BoardMain() {
     const urlParams = useParams();
 
     const selectList = [10, 30, 50, 100]
-    const [boardListAmount, setBoardListAmount] = useState([{}]);
     const [getBoard, setGetBoard] = useState([]);
     const [categoryTemp, setCategoryTemp] = useState("");
     const searchBoard = useRef();
     const [searchResult, setSearchResult] = useState([]);
     const [searchBoolean, setSearchBoolean] = useState(true)
+    const [initialPostAmount, setInitialPostAmount] = useState(10);
 
     let sortedList = [{}];
     let i = 0;
     let j = 0;
 
     useEffect(() => {
-        axios.get("/api/board")
-            .then(res => setGetBoard(res.data))
+        axios.get("/api/board/paging", {
+            params: {
+                pageNum: initialPostAmount
+            }
+        })
+            .then(res => {setGetBoard(res.data.content)
+            console.log(res.data)})
             .catch(err => console.log(err))
 
         switch (urlParams.id) {
@@ -40,36 +45,33 @@ export default function BoardMain() {
                 setCategoryTemp("전체게시판")
         }
 
-    }, [urlParams.id])
+    }, [urlParams.id, initialPostAmount]) //url의 id부분과 게시판 개수 변경 버튼을 누를때 마다 렌더링 실행
 
     const boardAmount = (e) => { // 게시글 개수 조절
 
-        axios.get("/api/board/paging",{
-            params:{
-                pageNum : e.target.value
-            }
-        })
-            .then(res => setGetBoard(res.data.content))
-            .catch(err => console.log(err))
-        console.log(getBoard);
-        console.log(e.target.value);
+        setInitialPostAmount(e.target.value)
 
     }
 
     const toSearchboard = () => { //게시글 검색
-        if(searchBoard.current.value!==null){ //여기의 useEffect 안에 넣으면 urlParam변화때만 동작하기 때문에 넣지말자
+
+        if (searchBoard.current.value !== null) { //여기의 useEffect 안에 넣으면 urlParam변화때만 동작하기 때문에 넣지말자
             setSearchBoolean(false);
+        }
+        if(searchBoard.current.value===""){
+            setSearchBoolean(true)
         }
         axios.get("/api/board/searchResult", {
             params: {
-                title: searchBoard.current.value
+                title: searchBoard.current.value,
+                pageNum : initialPostAmount
             }
         })
             .then(res => setSearchResult(res.data))
             .catch()
 
-        i=0;
-        j=0;
+        i = 0;
+        j = 0;
 
     }
 
@@ -113,7 +115,7 @@ export default function BoardMain() {
                     <div>작성자</div>
                     <div>작성시간</div>
                     <div>조회수</div>
-                    <div>좋아요</div>
+                    <div key="1">좋아요</div>
                 </div>
 
                 <div className={style.boardListAll}>
@@ -127,7 +129,7 @@ export default function BoardMain() {
                             sortedList[j++] = el;
                         }
 
-                    }):searchResult.map(el => {
+                    }) : searchResult.map(el => {
 
                         if (categoryTemp === "전체게시판") {
                             sortedList[i++] = el;
@@ -149,23 +151,21 @@ export default function BoardMain() {
                         }
 
                         return (
-
-                            <div className={style.list} key={el.id}>
+                            <div className={style.list} key={el.id+""}>
                                 <div style={{width: "4%"}}>{el.id}</div>
                                 <div style={{width: "45%"}}><Link to={"/board/" + el.id}>{el.title}</Link></div>
                                 <div style={{width: "20%"}}>{el.author}</div>
                                 <div style={{width: "11%"}}>{yyyy + MM + dd}</div>
                                 <div style={{width: "10%"}}>{el.hit}</div>
                                 <div style={{width: "10%"}}>{el.boardLikes}</div>
-
                             </div>
                         )
                     })}
                 </div>
-                <Link to="/write/0">
-                    <button className={style.toWriteBtn} type="button">글쓰기</button>
-                </Link>
             </div>
+            <Link to="/write/0" style={{position:"relative" ,bottom:"-50px", marginBottom:"100px"}}>
+                <button className={style.toWriteBtn} type="button">글쓰기</button>
+            </Link>
         </div>
     )
 }
