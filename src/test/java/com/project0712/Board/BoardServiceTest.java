@@ -3,6 +3,10 @@ package com.project0712.Board;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestConstructor;
 
 import java.util.ArrayList;
@@ -18,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BoardServiceTest {
 
     private final BoardRepository boardRepository;
-
     @Test
     public void 게시글저장() throws Exception {
         BoardDTO boardDTO = new BoardDTO();
@@ -70,7 +73,7 @@ public class BoardServiceTest {
         BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
 
         //containing = like 역할, ignoreCase = 대소문자 구분 x
-        List<BoardEntity> boardEntities = boardRepository.searchByTitleContainingIgnoreCaseOrContentContainingIgnoreCaseOrAuthorContainingIgnoreCase(boardEntity.getTitle(), boardEntity.getTitle(), boardEntity.getTitle());
+        List<BoardEntity> boardEntities = boardRepository.searchByTitleContainingIgnoreCaseOrContentContainingIgnoreCaseOrAuthorContainingIgnoreCaseOrderByIdDesc(boardEntity.getTitle(), boardEntity.getTitle(), boardEntity.getTitle());
 
         for (BoardEntity boardEntity1 : boardEntities) {
             BoardDTO boardDTO1 = BoardDTO.EntityToDTO(boardEntity1);
@@ -82,4 +85,14 @@ public class BoardServiceTest {
 
     }
 
+
+    @Test
+    void paging() {
+        int pageNum = 50;
+        int pageLimit = pageNum; // 한 페이지당 보여질 게시글 개수
+        Pageable pageable = PageRequest.of(0, pageLimit, Sort.by(Sort.Direction.DESC, "id"));
+        Page<BoardEntity> boardEntityPage = boardRepository.findAll(pageable);
+        Page<BoardDTO> map = boardEntityPage.map(entity -> new BoardDTO());
+        assertEquals(50,map.getSize());
+    }
 }

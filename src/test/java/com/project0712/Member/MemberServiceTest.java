@@ -1,10 +1,11 @@
 package com.project0712.Member;
 
-
+import com.project0712.Board.BoardValidator;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 

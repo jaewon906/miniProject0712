@@ -45,7 +45,7 @@ public class EmailController {
 
     }
     @PostMapping("/api/findPw/sendEmailAndVerificationCodeAndUserId")
-    public List<String> findPW(EmailDTO emailDTO) {
+    public MemberDTO findPW(EmailDTO emailDTO) {
 
         return emailServiceImpl.sendIdAndEmailAndVerificationCode(emailDTO);
 

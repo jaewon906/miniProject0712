@@ -44,10 +44,15 @@ export default function BoardMain() {
 
     const boardAmount = (e) => { // 게시글 개수 조절
 
-        setBoardListAmount(e.target.value);
-        axios.post("/api/board",)
-            .then(res => console.log(res))
+        axios.get("/api/board/paging",{
+            params:{
+                pageNum : e.target.value
+            }
+        })
+            .then(res => setGetBoard(res.data.content))
             .catch(err => console.log(err))
+        console.log(getBoard);
+        console.log(e.target.value);
 
     }
 
@@ -147,7 +152,7 @@ export default function BoardMain() {
 
                             <div className={style.list} key={el.id}>
                                 <div style={{width: "4%"}}>{el.id}</div>
-                                <div style={{width: "45%"}}><Link to={"/board/" + el.id + "/"}>{el.title}</Link></div>
+                                <div style={{width: "45%"}}><Link to={"/board/" + el.id}>{el.title}</Link></div>
                                 <div style={{width: "20%"}}>{el.author}</div>
                                 <div style={{width: "11%"}}>{yyyy + MM + dd}</div>
                                 <div style={{width: "10%"}}>{el.hit}</div>

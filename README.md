@@ -8,12 +8,13 @@
 
 ## backend
 
-#### springFramework(spring security), redis, JWT,  
+#### springFramework(spring security(예정), ContentValidator, Mail, JPA), redis, JWT   
 
 ## 기능
 
-### 1. 회원 가입 & 로그인 o
-### 2. 아이디 비밀번호 찾기 (이메일 인증으로 진행예정)
+### 1. 회원 가입 & 로그인 세모 (로그인 시 회원정보가 없어도 프론트에서 로그인로직이 발동)
+##### ContentValidator를 활용한 회원가입 데이터 값 검증
+### 2. 아이디 비밀번호 찾기 (이메일 인증으로 진행예정) o
 ### 3. 회원 탈퇴 세모 (탈퇴하면 게시글 또한 삭제되야하고 세션초기화 해야함)
 ### 4. 게시글 등록 & 수정 o
 ### 5. 게시판 종류 분류 o 

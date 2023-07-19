@@ -38,7 +38,6 @@ export default function BoardWrite() {
             } else if (content.length === 0) {
                 alert("내용을 입력해주세요")
             } else {
-                alert("등록되었습니다.")
                 axios.post("/api/board/write", null, {
                     params: { //data속성에 json데이터를 넣어놓으면 안된다. 데이터가 "data"라는 dictionary로 가게되서 바로 꺼낼수가없음.
                         // config속성에 넣어놓자.
@@ -49,8 +48,9 @@ export default function BoardWrite() {
                         id:id
                     }
                 })
-                    .then(res => res.data) // res.data는 스프링에서 @PostMapping에 해당하는 메서드의 리턴값
+                    .then(res => console.log(res.data)) // res.data는 스프링에서 @PostMapping에 해당하는 메서드의 리턴값
                     .catch(err => console.error(err))
+                alert("등록되었습니다.")
                 window.location.href = "/board";
             }
         }

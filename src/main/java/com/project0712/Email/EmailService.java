@@ -2,6 +2,8 @@ package com.project0712.Email;
 
 
 
+import com.project0712.Member.MemberDTO;
+
 import java.util.List;
 
 public interface EmailService {
@@ -10,7 +12,7 @@ public interface EmailService {
 
     String sendEmailAndVerificationCode(EmailDTO emailDTO);
 
-    List<String> sendIdAndEmailAndVerificationCode(EmailDTO emailDTO);
+    MemberDTO sendIdAndEmailAndVerificationCode(EmailDTO emailDTO);
 
 
 }

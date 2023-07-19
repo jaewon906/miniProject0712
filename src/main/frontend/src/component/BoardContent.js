@@ -1,30 +1,49 @@
 import style from "../css/boardContent.module.css"
 import axios from "axios";
 import {useParams} from "react-router-dom";
-import { useState} from "react";
+import {useEffect, useState} from "react";
 
 export default function BoardContent() {
     const boardId = useParams()
     const [title, setTitle] = useState();
     const [category, setCategory] = useState();
     const [content, setContent] = useState();
-    const [author, setAuthor]=useState();
+    const [author, setAuthor] = useState();
 
-    axios.get("/api/board/browsePost", {
-        params: {
-            id: boardId.id
-        }
-    })
-        .then(res => {
-            setTitle(res.data.title)
-            setCategory(res.data.category)
-            setContent(res.data.content)
-            setAuthor(res.data.author)
 
+    useEffect(() => {
+        axios.get("/api/board/browsePost", {
+            params: {
+                id: boardId.id
+            }
         })
-        .catch()
+            .then(res => {
+                setTitle(res.data.title)
+                setCategory(res.data.category)
+                setContent(res.data.content)
+                setAuthor(res.data.author)
+
+            })
+            .catch()
+    }, [])
     const toModify = () => { // 수정 페이지로 이동
-        window.location.href = "/write/"+boardId.id
+        window.location.href = "/write/" + boardId.id
+    }
+
+    const toDelete = () => {
+        const ret = window.confirm("삭제 하시겠습니까?")
+        if (ret) {
+            axios.post("/api/board/deletePost", null, {
+                params: {
+                    id: boardId.id
+                }
+            })
+                .then(()=>{
+                    alert("삭제되었습니다.");
+                    window.location.href='/board'
+                })
+                .catch()
+        }
     }
 
 
@@ -40,11 +59,17 @@ export default function BoardContent() {
                     <div>{category}</div>
                 </div>
 
-
                 <div className={style.contents}>
                     <div>{content}</div>
                 </div>
-                {author===window.sessionStorage.getItem("ID") ? <button onClick={toModify} className={style.toWriteBtn} type="button">수정하기</button>:""}
+                <div style={{marginTop: "50px", width: "50%", display: "flex", justifyContent: "space-evenly"}}>
+                    {author === window.sessionStorage.getItem("ID") ?
+                        <button style={{width: "120px"}} onClick={toModify} className={style.toWriteBtn}
+                                type="button">수정하기</button> : ""}
+                    {author === window.sessionStorage.getItem("ID") ?
+                        <button style={{width: "120px"}} onClick={toDelete} className={style.toWriteBtn}
+                                type="button">삭제하기</button> : ""}
+                </div>
             </div>
         </div>
     )

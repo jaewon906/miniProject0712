@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {useRef, useState} from "react";
 import axios from "axios";
 
-export default function FindID() {
+export default function FindPW() {
 
     const email = useRef();
     const userId = useRef();
@@ -43,11 +43,16 @@ export default function FindID() {
                 verificationCode: verification.current.value
             }
         }).then(res => {
-            alert("인증에 성공했습니다.")
             setIsAuthenticated(res.data)
+
+            if(isAuthenticated===""){
+                alert("인증에 실패했습니다. 다시 시도해주세요")
+            }
+            else
+            alert("인증에 성공했습니다.")
         })
             .catch(() => {
-                alert("인증에 실패했습니다. 다시 시도해주세요")
+
             })
     }
     const a = () => {
@@ -64,8 +69,14 @@ export default function FindID() {
 
                 axios.post("/api/findPw/modifyPassword", null, {
                     params: {
-                        userId: sentMyId,
-                        userPassword: newPassword.current.value
+                        id : isAuthenticated.id,
+                        userId : isAuthenticated.userId,
+                        userPassword: newPassword.current.value,
+                        userNickname : isAuthenticated.userNickname,
+                        userEmail : isAuthenticated.userEmail,
+                        userAddress : isAuthenticated.userAddress,
+                        userSex : isAuthenticated.userSex,
+                        userTel : isAuthenticated.userTel
                     }
                 })
                     .then(res => {setModifyPasswordResult(res.data)

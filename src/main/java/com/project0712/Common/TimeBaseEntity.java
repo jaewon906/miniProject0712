@@ -1,6 +1,7 @@
 package com.project0712.Common;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass // 부모 클래스로 사용할 때 붙힘
 // 하위 클래스에서 매핑 정보를 상속 받는다.
 @EntityListeners(AuditingEntityListener.class) // JPA가 엔티티의 변경 이벤트를 감지하고, 감사 정보(생성일, 수정일 등)를 자동으로 관리할 수 있게 됩니다.
+@Embeddable
 @Getter
 public class TimeBaseEntity {
     @CreationTimestamp // 해당 데이터를 테이블에 적용했을 때 시간을 자동으로 생성해준다

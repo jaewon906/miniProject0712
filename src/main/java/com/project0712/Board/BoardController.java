@@ -1,10 +1,13 @@
 package com.project0712.Board;
 
-import com.project0712.Member.MemberDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 // @Controller는 주로 view를 반환하기 위해 사용
@@ -25,18 +28,43 @@ public class BoardController {
     }
 
     @PostMapping("/api/board/write") // MultiValueMap으로 사용할 수도 있다.
-    public String write(BoardDTO board) {
-        boardServiceImpl.save(board);
-        return "redirect:/board";
+    public Object write(@Validated BoardDTO board, BindingResult bindingResult) { //@Validated를 붙혀주면 validate를 구현한 클래스 호출없어도 된다.
+        if (!bindingResult.hasErrors()) {
+            boardServiceImpl.save(board);
+            return "success";
+        } else {
+            return bindingResult.getAllErrors();
+        }
     }
 
-    @GetMapping("/api/board/browsePost")
-    public BoardDTO browse(BoardDTO boardDTO) { // 특정 게시글 불러오기
+    @GetMapping("/api/board/browsePost") //특정 게시글 조회
+    public BoardDTO browsePost(BoardDTO boardDTO) { // 특정 게시글 불러오기, 현재 요청을 한 번 보낼때 쿼리문이 3번 수행됨 -> 해결. 이유는 프론트단에서 렌더링이 3번 발생함.
+        // 따라서 useEffect에 넣어놓음
+        boardServiceImpl.updateHit(boardDTO);
         return boardServiceImpl.findSpecificPost(boardDTO);
     }
 
-    @GetMapping("/api/board/searchResult")
-    public List<BoardDTO> search(BoardDTO boardDTO){
+    @GetMapping("/api/board/searchResult") //게시글 서치
+    public List<BoardDTO> search(BoardDTO boardDTO) {
         return boardServiceImpl.search(boardDTO);
     }
+
+    @PostMapping("/api/board/deletePost")
+    public void deletePost(BoardDTO boardDTO) { // 게시글 삭제
+        boardServiceImpl.deletePost(boardDTO);
+    }
+
+    @GetMapping("/api/board/paging")
+    public Page<BoardDTO> paging(@PageableDefault(value = 1) Pageable pageable, BoardDTO boardDTO) {
+        int pageNum = boardDTO.getPageNum();
+        Page<BoardDTO> pagingList = boardServiceImpl.paging(pageable, pageNum);
+
+
+        int blockLimit = 10; //하단 페이지 번호 개수
+        int startPage = (((int)Math.ceil((double)pageable.getPageNumber() / blockLimit))-1) * blockLimit + 1;
+        int endPage = ((startPage - blockLimit -1) < pagingList.getTotalPages()) ? startPage + blockLimit -1 :pagingList.getTotalPages();
+
+        return pagingList;
+    }
+
 }

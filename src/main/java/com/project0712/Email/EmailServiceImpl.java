@@ -1,6 +1,7 @@
 package com.project0712.Email;
 
 
+import com.project0712.Member.MemberDTO;
 import com.project0712.Member.MemberEntity;
 import com.project0712.Member.MemberRepository;
 import jakarta.mail.MessagingException;
@@ -79,20 +80,19 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public List<String> sendIdAndEmailAndVerificationCode(EmailDTO emailDTO) {
-        List<String> idAndEmail = new ArrayList<>();
+    public MemberDTO sendIdAndEmailAndVerificationCode(EmailDTO emailDTO) {
         EmailEntity emailEntity = EmailEntity.DTOToEntity(emailDTO);
-        Optional<EmailEntity> byuserEmail = emailRepository.findByuserEmail(emailEntity.getUserEmail()); //해당하는 이메일 찾기
-//        Optional<MemberEntity> byuserEmail1 = memberRepository.findByuserEmail(byuserEmail.get().getUserEmail());
-        
-        if (byuserEmail.get().getUserId().equals(emailEntity.getUserId())) { //이메일이 존재하고 ID가 일치할 때
-            if (byuserEmail.get().getVerificationCode().equals(emailEntity.getVerificationCode())) { //위 조건 + 인증번호가 만족될때
+        Optional<EmailEntity> ByuserEmail = emailRepository.findByuserEmail(emailEntity.getUserEmail()); //해당하는 이메일 찾기
+        MemberEntity memberEntity= memberRepository.findByuserEmail(ByuserEmail.get().getUserEmail()).get(); //해당하는 이메일의 PK값 찾기
 
-//                for(MemberEntity memberEntity : byuserEmail1){
-//
-//                }
-                emailRepository.deleteByUserEmail(byuserEmail.get().getUserEmail());
-                return idAndEmail;
+
+        if (ByuserEmail.get().getUserId().equals(emailEntity.getUserId())) { //이메일이 존재하고 ID가 일치할 때
+            if (ByuserEmail.get().getVerificationCode().equals(emailEntity.getVerificationCode())) { //위 조건 + 인증번호가 만족될때
+
+                MemberDTO memberDTO = MemberDTO.EntityToDTO(memberEntity);
+
+                emailRepository.deleteByUserEmail(ByuserEmail.get().getUserEmail());
+                return memberDTO;
             }
         }
         return null;
