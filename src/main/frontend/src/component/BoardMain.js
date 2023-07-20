@@ -3,6 +3,7 @@ import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 import {useEffect, useRef, useState} from "react";
 
+let page = 0
 export default function BoardMain() {
     const urlParams = useParams();
 
@@ -12,21 +13,25 @@ export default function BoardMain() {
     const searchBoard = useRef();
     const [searchResult, setSearchResult] = useState([]);
     const [searchBoolean, setSearchBoolean] = useState(true)
-    const [initialPostAmount, setInitialPostAmount] = useState(10);
+    const [pageAttributes, setPageAttributes] = useState()
+    const [pages, setPages] = useState(0)
+    const [size, setSize] = useState(10)
+
+    const urlQuery = `page=${pages}&size=${size}&sort=id,DESC`
 
     let sortedList = [{}];
     let i = 0;
     let j = 0;
 
     useEffect(() => {
-        axios.get("/api/board/paging", {
-            params: {
-                pageNum: initialPostAmount
-            }
-        })
-            .then(res => {setGetBoard(res.data.content)
-            console.log(res.data)})
-            .catch(err => console.log(err))
+
+        axios.get("/api/board?" + urlQuery)
+            .then(res => {
+                setPageAttributes(res.data)
+                setGetBoard(res.data.content)
+
+            })
+            .catch(err => console.error(err))
 
         switch (urlParams.id) {
             case "1":
@@ -45,26 +50,28 @@ export default function BoardMain() {
                 setCategoryTemp("전체게시판")
         }
 
-    }, [urlParams.id, initialPostAmount]) //url의 id부분과 게시판 개수 변경 버튼을 누를때 마다 렌더링 실행
+    }, [urlParams.id, pages, size]) //url의 id부분과 게시판 개수 변경 버튼을 누를때 마다 렌더링 실행
 
-    const boardAmount = (e) => { // 게시글 개수 조절
+    const boardAmount = (e) => {       // 게시글 개수 조절
 
-        setInitialPostAmount(e.target.value)
+        setPages(0)
+        setSize(e.target.value)
 
     }
 
-    const toSearchboard = () => { //게시글 검색
+    const toSearchboard = () => {           //게시글 검색
+        setPages(0);
 
         if (searchBoard.current.value !== null) { //여기의 useEffect 안에 넣으면 urlParam변화때만 동작하기 때문에 넣지말자
             setSearchBoolean(false);
         }
-        if(searchBoard.current.value===""){
+        if (searchBoard.current.value === "") {
             setSearchBoolean(true)
         }
-        axios.get("/api/board/searchResult", {
+
+        axios.get("/api/board/searchResult?" + urlQuery, {
             params: {
                 title: searchBoard.current.value,
-                pageNum : initialPostAmount
             }
         })
             .then(res => setSearchResult(res.data))
@@ -72,6 +79,30 @@ export default function BoardMain() {
 
         i = 0;
         j = 0;
+
+    }
+
+    const paging = (e) => {          // 페이징 처리
+        const movePage = e.target.id
+        switch (movePage) {
+            case "first":
+                page = 0;
+                setPages(page)
+                break;
+            case "last":
+                page = pageAttributes.totalPages - 1;
+                setPages(page)
+                break;
+            case "prev":
+                --page;
+                setPages(page)
+                break;
+            case "next":
+                ++page;
+                setPages(page)
+                break;
+            default :console.error("Warning. you clicked page button, but no change")
+        }
 
     }
 
@@ -151,7 +182,7 @@ export default function BoardMain() {
                         }
 
                         return (
-                            <div className={style.list} key={el.id+""}>
+                            <div className={style.list} key={el.id + ""}>
                                 <div style={{width: "4%"}}>{el.id}</div>
                                 <div style={{width: "45%"}}><Link to={"/board/" + el.id}>{el.title}</Link></div>
                                 <div style={{width: "20%"}}>{el.author}</div>
@@ -162,8 +193,29 @@ export default function BoardMain() {
                         )
                     })}
                 </div>
+                <div style={{margin: "20px 0px", minWidth: "400px", display: "flex", justifyContent: "space-between"}}>
+                    <div style={{width:"120px", display: "flex", justifyContent: "space-between"}}>
+                        <p className={style.pages} onClick={paging} id="first">처음</p>
+                        {page!==0 ?
+                            <p className={style.pages} onClick={paging} id="prev">이전</p>:""}
+                    </div>
+                    <div className={style.pageNumberBox} style={{minWidth: "0px", display: "flex", justifyContent: "space-between"}}>
+                        <p>{page+1}</p>
+                        <p>{page+2}</p>
+                        <p>{page+3}</p>
+                        <p>{page+4}</p>
+                        <p>{page+5}</p>
+                    </div>
+                    {pageAttributes!==undefined?
+                    <div style={{ width:"120px", display: "flex", justifyContent: "space-between"}}>
+                        {page!== pageAttributes.totalPages-1 ?
+                            <p className={style.pages} onClick={paging} id="next">다음</p>:
+                            ""}
+                            <p className={style.pages} onClick={paging} id="last">마지막</p>
+                    </div>:""}
+                </div>
             </div>
-            <Link to="/write/0" style={{position:"relative" ,bottom:"-50px", marginBottom:"100px"}}>
+            <Link to="/write/0" style={{position: "relative", bottom: "-50px", marginBottom: "100px"}}>
                 <button className={style.toWriteBtn} type="button">글쓰기</button>
             </Link>
         </div>

@@ -5,29 +5,29 @@ import {useParams} from "react-router-dom";
 
 export default function BoardWrite() {
     const ref1 = useRef(),
-        ref2 = useRef(),
         ref3 = useRef();
     const categories = ["자유게시판", "공략게시판", "공부게시판", "꿀팁게시판"];
-    let i = 0;
     const [category, setCategory1] = useState("자유게시판");
     const boardNum = useParams();
     const [data, setData] = useState();
 
-    useEffect(()=>{
-        axios.get("/api/board/write",{
+    useEffect(() => {
+        axios.get("/api/board/write", {
             params:
                 {
-                    id:boardNum.id
+                    id: boardNum.id
                 }
         })
-            .then(res=>setData(res.data))
+            .then(res => {
+                setData(res.data)
+                console.log(res.data)
+            })
             .catch()
-    },[setData])
+    }, [setData])
 
 
     const toSubmit = () => { // 글 저장을 위한 함수
         const title = ref1.current.value,
-            id = ref2.current.value,
             content = ref3.current.value,
             author = window.sessionStorage.getItem("ID"),
             ret = window.confirm("등록하시겠습니까?")
@@ -45,10 +45,11 @@ export default function BoardWrite() {
                         category: category,
                         content: content,
                         author: author,
-                        id:id
+                        id: data.id,
+                        hit: data.hit
                     }
                 })
-                    .then(res => console.log(res.data)) // res.data는 스프링에서 @PostMapping에 해당하는 메서드의 리턴값
+                    .then(res => res.data) // res.data는 스프링에서 @PostMapping에 해당하는 메서드의 리턴값
                     .catch(err => console.error(err))
                 alert("등록되었습니다.")
                 window.location.href = "/board";
@@ -61,29 +62,28 @@ export default function BoardWrite() {
     }
 
     return (
-        <>{data!==undefined?
-        <div className={style.container}>
-            <div className={style.main}>
-                <h1>글쓰기</h1>
-                <div className={style.title_header}>
-                    <input type="hidden" name="id" ref={ref2} value={data.id}/>
-                    <div className={style.title}>
-                        <p>제목 :</p> <textarea placeholder="제목을 입력해주세요" ref={ref1}>{data.title}</textarea>
-                    </div>
-                    <select onChange={(e) => selectCategory(e.target.value)}>
-                        {categories.map(el => {
-                            return (
-                                <option key={el} value={el}>{el}</option>
-                            )
+        <>{data !== undefined ?
+            <div className={style.container}>
+                <div className={style.main}>
+                    <h1>글쓰기</h1>
+                    <div className={style.title_header}>
+                        <div className={style.title}>
+                            <p>제목 :</p> <textarea placeholder="제목을 입력해주세요" ref={ref1}>{data.title}</textarea>
+                        </div>
+                        <select onChange={(e) => selectCategory(e.target.value)}>
+                            {categories.map(el => {
+                                return (
+                                    <option key={el} value={el}>{el}</option>
+                                )
 
-                        })}
-                    </select>
+                            })}
+                        </select>
+                    </div>
+                    <div className={style.contents}>
+                        <textarea placeholder="내용을 입력해주세요" ref={ref3}>{data.content}</textarea>
+                    </div>
+                    <button onClick={toSubmit} className={style.toWriteBtn} type="button">등록하기</button>
                 </div>
-                <div className={style.contents}>
-                    <textarea placeholder="내용을 입력해주세요" ref={ref3}>{data.content}</textarea>
-                </div>
-                <button onClick={toSubmit} className={style.toWriteBtn} type="button">등록하기</button>
-            </div>
-        </div>:""}</>
+            </div> : ""}</>
     )
 }

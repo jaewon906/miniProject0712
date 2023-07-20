@@ -21,7 +21,6 @@ public class BoardDTO {
     private LocalDateTime boardCreatedTime;
     private LocalDateTime boardUpdatedTime;
 
-    private int pageNum;
 
     public static BoardDTO EntityToDTO(BoardEntity boardEntity){
         BoardDTO boardDTO = new BoardDTO();

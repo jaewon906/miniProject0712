@@ -2,7 +2,6 @@ package com.project0712.Board;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
@@ -11,9 +10,9 @@ public interface BoardService {
 
     BoardDTO findSpecificPost(BoardDTO boardDTO);
 
-    List<BoardDTO> search(BoardDTO boardDTO);
+    List<BoardDTO> search(BoardDTO boardDTO, Pageable pageable);
 
     void deletePost(BoardDTO boardDTO);
 
-    Page<BoardDTO> paging(Pageable pageable, int pageNum);
+    Page<BoardDTO> paging(Pageable pageable);
 }
