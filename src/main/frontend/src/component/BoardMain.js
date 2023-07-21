@@ -106,6 +106,12 @@ export default function BoardMain() {
 
     }
 
+    const pageNumOnClick = (e)=>{
+        console.log(e.target.value)
+        page=parseInt(e.target.id)
+        setPages(page)
+    }
+
     return (
         <div className={style.container}>
             <div className={style.main}>
@@ -200,11 +206,11 @@ export default function BoardMain() {
                             <p className={style.pages} onClick={paging} id="prev">이전</p>:""}
                     </div>
                     <div className={style.pageNumberBox} style={{minWidth: "0px", display: "flex", justifyContent: "space-between"}}>
-                        <p>{page+1}</p>
-                        <p>{page+2}</p>
-                        <p>{page+3}</p>
-                        <p>{page+4}</p>
-                        <p>{page+5}</p>
+                        <p onClick={pageNumOnClick} id={page+1+""}>{page+1}</p>
+                        <p onClick={pageNumOnClick} id={page+1+""}>{page+2}</p>
+                        <p onClick={pageNumOnClick} id={page+1+""}>{page+3}</p>
+                        <p onClick={pageNumOnClick} id={page+1+""}>{page+4}</p>
+                        <p onClick={pageNumOnClick} id={page+1+""}>{page+5}</p>
                     </div>
                     {pageAttributes!==undefined?
                     <div style={{ width:"120px", display: "flex", justifyContent: "space-between"}}>

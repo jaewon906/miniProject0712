@@ -53,10 +53,6 @@ public class BoardController {
 
     @GetMapping("/api/board") // 페이징 기능 + 게시판 들어갈 때 자동으로 게시글 띄움
     public Page<BoardDTO> paging(@PageableDefault(value = 1) Pageable pageable) {
-        //        int blockLimit = 10; //하단 페이지 번호 개수
-//        int startPage = (((int)Math.ceil((double)pageable.getPageNumber() / blockLimit))-1) * blockLimit + 1;
-//        int endPage = ((startPage - blockLimit -1) < pagingList.getTotalPages()) ? startPage + blockLimit -1 :pagingList.getTotalPages();
-
         return boardServiceImpl.paging(pageable);
     }
 
