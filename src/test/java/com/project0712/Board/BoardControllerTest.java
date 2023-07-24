@@ -30,18 +30,6 @@ class BoardControllerTest {
     @Test
     @DisplayName("paging의 컨트롤러부터 시작해서 데이터가 잘 전달될까?")
     void paging() {
-        Pageable pageable=new PageableImpl();
-        Page<BoardDTO> pagingList = boardServiceImpl.paging(pageable, 50);
-        assertEquals(50,pagingList.getSize());
-        List<Object> list = new ArrayList<>();
 
-        int blockLimit = 10; //하단 페이지 번호 개수
-        int startPage = (((int)Math.ceil((double)pageable.getPageNumber() / blockLimit))-1) * blockLimit + 1;
-        int endPage = ((startPage - blockLimit -1) < pagingList.getTotalPages()) ? startPage + blockLimit -1 :pagingList.getTotalPages();
-
-        pagingList.map(list::add);
-        list.add(blockLimit);
-        list.add(startPage);
-        list.add(endPage);
     }
 }

@@ -1,5 +1,7 @@
 package com.project0712.Member;
 
+import com.project0712.Auth.AuthDTO;
+import com.project0712.Auth.SecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberServiceImpl memberServiceImpl;
+    private final SecurityConfig securityConfig;
 
     @PostMapping("/api/signUp")
     public void signUp(MemberDTO memberDTO) {
@@ -39,6 +42,7 @@ public class MemberController {
 
     @GetMapping("/api/logIn") // 로그인
     public MemberDTO logInForm(MemberDTO memberDTO) {
+        securityConfig.jws(memberDTO);
         return memberServiceImpl.logIn(memberDTO);
     }
 

@@ -8,7 +8,7 @@
 
 ## backend
 
-#### springFramework(spring security(예정), ContentValidator, Mail, JPA), redis, JWT   
+#### springFramework(spring security(예정), Mail, JPA), redis, JWT   
 
 ## 기능
 

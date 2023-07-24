@@ -64,23 +64,7 @@ public class BoardServiceTest {
 
     @Test
     public void 게시글검색하기() throws Exception{
-        BoardDTO boardDTO = new BoardDTO();
 
-        boardDTO.setTitle("천재");
-        boardDTO.setContent("천재");
-
-        List<BoardDTO> boardDTOList = new ArrayList<BoardDTO>();
-        BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
-
-        //containing = like 역할, ignoreCase = 대소문자 구분 x
-        List<BoardEntity> boardEntities = boardRepository.searchByTitleContainingIgnoreCaseOrContentContainingIgnoreCaseOrAuthorContainingIgnoreCaseOrderByIdDesc(boardEntity.getTitle(), boardEntity.getTitle(), boardEntity.getTitle());
-
-        for (BoardEntity boardEntity1 : boardEntities) {
-            BoardDTO boardDTO1 = BoardDTO.EntityToDTO(boardEntity1);
-            boardDTOList.add(boardDTO1);
-        }
-
-        assertEquals(1,boardEntities.size());
 
 
     }

@@ -1,5 +1,6 @@
 package com.project0712.Member;
 
+import com.project0712.Auth.SecurityConfig;
 import com.project0712.Board.BoardValidator;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.springframework.test.context.TestConstructor;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+import java.util.Date;
 import java.util.Optional;
 
 @SpringBootTest
@@ -17,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberServiceTest {
     private final MemberRepository memberRepository;
+    private final SecurityConfig securityConfig;
 
     @Test
     public void 중복회원가입방지() throws Exception { // 매개변수를 붙히니까 안댐
@@ -54,7 +57,9 @@ public class MemberServiceTest {
     public void 로그인_서비스() throws Exception {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setUserId("ploi9");
-        memberDTO.setUserPassword("rkddkwl");
+        memberDTO.setUserNickname("1111");
+        memberDTO.setUserEmail("1");
+        assertEquals("",securityConfig.jws(memberDTO));
 
         MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
         Optional<MemberEntity> allByUserId = memberRepository.findByuserId(memberEntity.getUserId());

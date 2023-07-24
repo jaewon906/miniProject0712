@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 // @Controller는 주로 view를 반환하기 위해 사용
 // @RestController는 주로 JSON 형태로 객체 데이터를 반환함. = @Controller + @ResponseBody
 @RestController
@@ -17,21 +18,15 @@ import java.util.List;
 public class BoardController {
     private final BoardServiceImpl boardServiceImpl;
 
-
-
     @GetMapping("/api/board/write")
     public BoardDTO writeForm(BoardDTO boardDTO) {
         return boardServiceImpl.findSpecificPost(boardDTO);
     }
 
     @PostMapping("/api/board/write") // MultiValueMap으로 사용할 수도 있다.
-    public Object write(@Validated BoardDTO board, BindingResult bindingResult) { //@Validated를 붙혀주면 validate를 구현한 클래스 호출없어도 된다.
-        if (!bindingResult.hasErrors()) {
+    public String write(BoardDTO board) { //게시글 생성
             boardServiceImpl.save(board);
             return "success";
-        } else {
-            return bindingResult.getAllErrors();
-        }
     }
 
     @GetMapping("/api/board/browsePost") //특정 게시글 조회
