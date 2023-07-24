@@ -59,7 +59,7 @@ export default function BoardMain() {
 
     }
 
-    const toSearchboard = () => {           //게시글 검색
+    const toSearchBoard = () => {           //게시글 검색
         setPages(0);
 
         if (searchBoard.current.value !== null) { //여기의 useEffect 안에 넣으면 urlParam변화때만 동작하기 때문에 넣지말자
@@ -134,7 +134,7 @@ export default function BoardMain() {
                     </Link>
                 </div>
                 <div className={style.boardListAll_header}>
-                    <input type="search" onInput={toSearchboard}
+                    <input type="search" onInput={toSearchBoard}
                            ref={searchBoard} className={style.find} placeholder={"제목, 내용, 작성자 검색 가능"}/>
 
                     <div style={{marginLeft: "50px", marginRight: "10px"}}>글 개수 :</div>

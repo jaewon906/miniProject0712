@@ -20,7 +20,7 @@ public class MemberServiceTest {
     private final SecurityConfig securityConfig;
 
     @Test
-    public void 중복회원가입방지() throws Exception { // 매개변수를 붙히니까 안댐
+    public void 중복회원가입방지()  { // 매개변수를 붙히니까 안댐
 
         //유일해야 하는것 : id, 닉네임, 이메일
         MemberDTO memberDTO = new MemberDTO();
@@ -37,7 +37,7 @@ public class MemberServiceTest {
     }
 
     @Test
-    public void 아이디_닉네임_이메일_중복체크() throws Exception {
+    public void 아이디_닉네임_이메일_중복체크()  {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setUserId("qwer");
         memberDTO.setUserNickname("qqq");
@@ -52,12 +52,13 @@ public class MemberServiceTest {
 
 
     @Test
-    public void 로그인_서비스() throws Exception {
+    public void 로그인_서비스()  {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setUserId("ploi9");
         memberDTO.setUserNickname("1111");
         memberDTO.setUserEmail("1");
-        assertEquals("",securityConfig.refreshToken(memberDTO));
+
+        assertEquals("",securityConfig.accessToken(memberDTO));
 
         MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
         Optional<MemberEntity> allByUserId = memberRepository.findByuserId(memberEntity.getUserId());

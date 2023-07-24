@@ -23,13 +23,14 @@ public class SecurityConfig {
         Key key = Keys.hmacShaKeyFor(AuthDTO.secretKeyToByte);
 
         return Jwts.builder()
+                .setHeaderParam("type","accessToken")
                 .claim("userId", memberDTO.getUserId())
                 .claim("userNickname", memberDTO.getUserNickname())
                 .claim("userEmail", memberDTO.getUserEmail())
                 .setIssuer(memberDTO.getUserId())
                 .setIssuedAt(currentTime)
                 .setExpiration(expireDate(expireDate))
-                .signWith(key, SignatureAlgorithm.HS256) // (alg, secret_key)는 Deprecated됨
+                .signWith(key, SignatureAlgorithm.HS256) // (alg, secret_key)는 Deprecated
                 .compact();
 
     }
@@ -41,10 +42,14 @@ public class SecurityConfig {
         Key key = Keys.hmacShaKeyFor(AuthDTO.secretKeyToByte);
 
         return Jwts.builder()
+                .setHeaderParam("type","refreshToken")
+                .claim("userId", memberDTO.getUserId())
+                .claim("userNickname", memberDTO.getUserNickname())
+                .claim("userEmail", memberDTO.getUserEmail())
                 .setIssuer(memberDTO.getUserId())
                 .setIssuedAt(currentTime)
                 .setExpiration(expireDate(expireDate))
-                .signWith(key, SignatureAlgorithm.HS256) // (alg, secret_key)는 Deprecated됨
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 }
