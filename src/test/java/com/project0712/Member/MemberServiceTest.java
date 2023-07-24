@@ -1,7 +1,6 @@
 package com.project0712.Member;
 
 import com.project0712.Auth.SecurityConfig;
-import com.project0712.Board.BoardValidator;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +10,6 @@ import org.springframework.test.context.TestConstructor;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-import java.util.Date;
 import java.util.Optional;
 
 @SpringBootTest
@@ -59,7 +57,7 @@ public class MemberServiceTest {
         memberDTO.setUserId("ploi9");
         memberDTO.setUserNickname("1111");
         memberDTO.setUserEmail("1");
-        assertEquals("",securityConfig.jws(memberDTO));
+        assertEquals("",securityConfig.refreshToken(memberDTO));
 
         MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
         Optional<MemberEntity> allByUserId = memberRepository.findByuserId(memberEntity.getUserId());

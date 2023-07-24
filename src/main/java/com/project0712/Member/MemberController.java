@@ -1,6 +1,5 @@
 package com.project0712.Member;
 
-import com.project0712.Auth.AuthDTO;
 import com.project0712.Auth.SecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +41,7 @@ public class MemberController {
 
     @GetMapping("/api/logIn") // 로그인
     public MemberDTO logInForm(MemberDTO memberDTO) {
-        securityConfig.jws(memberDTO);
+        securityConfig.accessToken(memberDTO);
         return memberServiceImpl.logIn(memberDTO);
     }
 
