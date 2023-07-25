@@ -38,9 +38,14 @@ export default function BoardContent() {
                     id: boardId.id
                 }
             })
-                .then(()=>{
-                    alert("삭제되었습니다.");
-                    window.location.href='/board'
+                .then((res)=>{
+                    if(res.data){
+                        alert("삭제되었습니다.");
+                        window.location.href='/board'
+                    }
+                    else{
+                        alert("다시 시도해주세요")
+                    }
                 })
                 .catch()
         }

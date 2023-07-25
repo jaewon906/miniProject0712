@@ -6,6 +6,7 @@ import com.project0712.Common.CookieConfig;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberServiceImpl memberServiceImpl;
@@ -45,14 +47,20 @@ public class MemberController {
     }
 
     @GetMapping("/api/logIn") // 로그인
-    public String logInForm(MemberDTO memberDTO, HttpServletResponse response) {
+    public void logInForm(MemberDTO memberDTO, HttpServletResponse response) {
         TokenDTO tokenDTO = memberServiceImpl.logIn(memberDTO);
-        Cookie accessToken = cookieConfig.setCookie(tokenDTO.getAccessToken(), "accessToken", true, "/", 3600 / 60);
-        Cookie refreshToken = cookieConfig.setCookie(tokenDTO.getRefreshToken(), "refreshToken", true, "/", 7*24*3600);
-        response.addCookie(accessToken);
-        response.addCookie(refreshToken);
-
-        return tokenDTO.getAccessToken();
+        try{ //이 배치로 코드를 작성한 이유는 사용자의 닉네임을 쿠키로 전달하기 전에 아이디 비번 일치해서 토큰이 정상적으로 발급될 때 과정을 거친 후 쿠키에 사용자 닉네임 전송
+            Cookie accessToken = cookieConfig.setCookie(tokenDTO.getAccessToken(), "accessToken", true, "/", 3600);
+            Cookie refreshToken = cookieConfig.setCookie(tokenDTO.getRefreshToken(), "refreshToken", true, "/", 7*24*3600);
+            Cookie memberInfo = cookieConfig.setCookie(tokenConfig.memberInfoFromJWT(tokenDTO),"nickname",false,"/",3600);
+            response.addCookie(accessToken);
+            response.addCookie(refreshToken);
+//            response.addCookie(memberInfo); // 사용자의 닉네임을 쿠키로 전달
+        }catch (IllegalArgumentException e) {
+            log.error("JWT claims string is empty.", e);
+        }catch (Exception e){
+            log.error("error",e);
+        }
 
     }
 

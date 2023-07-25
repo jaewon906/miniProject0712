@@ -49,9 +49,9 @@ public class BoardController {
     }
 
     @PostMapping("/api/board/deletePost") //게시글 삭제
-    public void deletePost(BoardDTO boardDTO, HttpServletRequest request) { // 게시글 삭제
+    public boolean deletePost(BoardDTO boardDTO, HttpServletRequest request) { // 게시글 삭제
         Map<String, String> tokens = cookieConfig.requestCookie(request);
-        boardServiceImpl.deletePost(boardDTO, tokens);
+        return boardServiceImpl.deletePost(boardDTO, tokens);
     }
 
     @GetMapping("/api/board") // 페이징 기능 + 게시판 들어갈 때 자동으로 게시글 띄움

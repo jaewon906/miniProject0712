@@ -13,7 +13,7 @@ public interface BoardService {
 
     List<BoardDTO> search(BoardDTO boardDTO, Pageable pageable);
 
-    void deletePost(BoardDTO boardDTO, Map<String, String> tokens);
+    boolean deletePost(BoardDTO boardDTO, Map<String, String> tokens);
 
     Page<BoardDTO> paging(Pageable pageable);
 }

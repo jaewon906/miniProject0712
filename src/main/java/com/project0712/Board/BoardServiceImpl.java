@@ -56,12 +56,14 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void deletePost(BoardDTO boardDTO, Map<String, String> tokens) { //삭제 기능
+    public boolean deletePost(BoardDTO boardDTO, Map<String, String> tokens) { //삭제 기능
         boolean validateToken = tokenConfig.validateToken(tokens);
         if(validateToken){
             BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
             boardRepository.deleteById(boardEntity.getId());
+            return true;
         }
+        else return false;
     }
 
     @Override

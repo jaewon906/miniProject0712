@@ -45,7 +45,6 @@ public class MemberServiceImpl implements MemberService {
             if (memberDTO.getUserPassword().equals(allByUserId.get().getUserPassword())) {
                 MemberDTO entityToDTO = MemberDTO.EntityToDTO(allByUserId.get());
                 return tokenConfig.generateToken(entityToDTO);
-//                return MemberDTO.EntityToDTO(allByUserId.get());
             } else {
                 return null;
             }
