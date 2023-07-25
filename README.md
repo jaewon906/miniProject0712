@@ -8,7 +8,9 @@
 
 ## backend
 
-#### springFramework(spring security(예정), Mail, JPA), redis, JWT   
+#### springFramework(spring security(예정), Mail, JPA), redis, JWT(진행중)   
+
+#### JWT 활용할 섹션 : 로그인, 글쓰기, 글수정, 글삭제
 
 ## 기능
 

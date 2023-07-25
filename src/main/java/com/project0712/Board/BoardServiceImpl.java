@@ -1,13 +1,16 @@
 package com.project0712.Board;
 
+import com.project0712.Auth.TokenConfig;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.server.Cookie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -15,6 +18,7 @@ import java.util.Optional;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final TokenConfig tokenConfig;
 
 
     @Override
@@ -52,9 +56,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void deletePost(BoardDTO boardDTO) { //삭제 기능
-        BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
-        boardRepository.deleteById(boardEntity.getId());
+    public void deletePost(BoardDTO boardDTO, Map<String, String> tokens) { //삭제 기능
+        boolean validateToken = tokenConfig.validateToken(tokens);
+        if(validateToken){
+            BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
+            boardRepository.deleteById(boardEntity.getId());
+        }
     }
 
     @Override

@@ -1,11 +1,15 @@
 package com.project0712.Member;
 
+import com.project0712.Auth.TokenDTO;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+
 import java.util.List;
 
 public interface MemberService {
     void save(MemberDTO memberDTO);
 
-    MemberDTO logIn(MemberDTO memberDTO);
+    TokenDTO logIn(MemberDTO memberDTO);
 
     boolean withdrawal(MemberDTO memberDTO);
 

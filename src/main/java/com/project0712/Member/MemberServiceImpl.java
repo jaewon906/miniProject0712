@@ -1,5 +1,9 @@
 package com.project0712.Member;
 
+import com.project0712.Auth.TokenConfig;
+import com.project0712.Auth.TokenDTO;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,6 +17,7 @@ import java.util.Optional;
 @Transactional
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final TokenConfig tokenConfig;
 
     @Override
     public boolean withdrawal(MemberDTO memberDTO) { //회원 탈퇴
@@ -31,14 +36,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO logIn(MemberDTO memberDTO) { //로그인
+    public TokenDTO logIn(MemberDTO memberDTO) { //로그인
         MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
         Optional<MemberEntity> allByUserId = memberRepository.findByuserId(memberEntity.getUserId());
 
         if (allByUserId.isPresent()) {
 
             if (memberDTO.getUserPassword().equals(allByUserId.get().getUserPassword())) {
-                return MemberDTO.EntityToDTO(allByUserId.get());
+                MemberDTO entityToDTO = MemberDTO.EntityToDTO(allByUserId.get());
+                return tokenConfig.generateToken(entityToDTO);
+//                return MemberDTO.EntityToDTO(allByUserId.get());
             } else {
                 return null;
             }

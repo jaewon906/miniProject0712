@@ -1,6 +1,10 @@
 package com.project0712.Member;
 
-import com.project0712.Auth.SecurityConfig;
+import com.project0712.Auth.TokenConfig;
+import com.project0712.Auth.TokenDTO;
+import com.project0712.Common.CookieConfig;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberServiceImpl memberServiceImpl;
-    private final SecurityConfig securityConfig;
+    private final TokenConfig tokenConfig;
+    private final CookieConfig cookieConfig;
 
     @PostMapping("/api/signUp")
     public void signUp(MemberDTO memberDTO) {
@@ -40,9 +45,15 @@ public class MemberController {
     }
 
     @GetMapping("/api/logIn") // 로그인
-    public MemberDTO logInForm(MemberDTO memberDTO) {
-        securityConfig.accessToken(memberDTO);
-        return memberServiceImpl.logIn(memberDTO);
+    public String logInForm(MemberDTO memberDTO, HttpServletResponse response) {
+        TokenDTO tokenDTO = memberServiceImpl.logIn(memberDTO);
+        Cookie accessToken = cookieConfig.setCookie(tokenDTO.getAccessToken(), "accessToken", true, "/", 3600 / 60);
+        Cookie refreshToken = cookieConfig.setCookie(tokenDTO.getRefreshToken(), "refreshToken", true, "/", 7*24*3600);
+        response.addCookie(accessToken);
+        response.addCookie(refreshToken);
+
+        return tokenDTO.getAccessToken();
+
     }
 
     @PostMapping("/api/withdrawal") // 회원삭제
@@ -54,5 +65,7 @@ public class MemberController {
     public void forgotAndModifyPassword(MemberDTO memberDTO) {
         memberServiceImpl.forgotAndModifyPassword(memberDTO);
     }
+
+
 
 }

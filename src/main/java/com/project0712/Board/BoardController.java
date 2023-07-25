@@ -1,6 +1,10 @@
 package com.project0712.Board;
 
+import com.project0712.Common.CookieConfig;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -9,14 +13,17 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 // @Controller는 주로 view를 반환하기 위해 사용
 // @RestController는 주로 JSON 형태로 객체 데이터를 반환함. = @Controller + @ResponseBody
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class BoardController {
     private final BoardServiceImpl boardServiceImpl;
+    private final CookieConfig cookieConfig;
 
     @GetMapping("/api/board/write")
     public BoardDTO writeForm(BoardDTO boardDTO) {
@@ -42,8 +49,9 @@ public class BoardController {
     }
 
     @PostMapping("/api/board/deletePost") //게시글 삭제
-    public void deletePost(BoardDTO boardDTO) { // 게시글 삭제
-        boardServiceImpl.deletePost(boardDTO);
+    public void deletePost(BoardDTO boardDTO, HttpServletRequest request) { // 게시글 삭제
+        Map<String, String> tokens = cookieConfig.requestCookie(request);
+        boardServiceImpl.deletePost(boardDTO, tokens);
     }
 
     @GetMapping("/api/board") // 페이징 기능 + 게시판 들어갈 때 자동으로 게시글 띄움

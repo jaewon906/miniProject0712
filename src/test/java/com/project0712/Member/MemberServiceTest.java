@@ -1,6 +1,6 @@
 package com.project0712.Member;
 
-import com.project0712.Auth.SecurityConfig;
+import com.project0712.Auth.TokenConfig;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberServiceTest {
     private final MemberRepository memberRepository;
-    private final SecurityConfig securityConfig;
+    private final TokenConfig tokenConfig;
 
     @Test
     public void 중복회원가입방지()  { // 매개변수를 붙히니까 안댐
@@ -58,7 +58,11 @@ public class MemberServiceTest {
         memberDTO.setUserNickname("1111");
         memberDTO.setUserEmail("1");
 
-        assertEquals("",securityConfig.accessToken(memberDTO));
+        tokenConfig.generateToken(memberDTO);
+
+
+//        assertEquals("", token);
+        assertEquals("",tokenConfig.generateToken(memberDTO));
 
         MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
         Optional<MemberEntity> allByUserId = memberRepository.findByuserId(memberEntity.getUserId());

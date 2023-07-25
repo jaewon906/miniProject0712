@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BoardService {
     void save(BoardDTO boardDTO);
@@ -12,7 +13,7 @@ public interface BoardService {
 
     List<BoardDTO> search(BoardDTO boardDTO, Pageable pageable);
 
-    void deletePost(BoardDTO boardDTO);
+    void deletePost(BoardDTO boardDTO, Map<String, String> tokens);
 
     Page<BoardDTO> paging(Pageable pageable);
 }
