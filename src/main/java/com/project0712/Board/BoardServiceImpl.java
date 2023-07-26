@@ -1,6 +1,7 @@
 package com.project0712.Board;
 
 import com.project0712.Auth.TokenConfig;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.server.Cookie;
@@ -57,13 +58,15 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public boolean deletePost(BoardDTO boardDTO, Map<String, String> tokens) { //삭제 기능
-        boolean validateToken = tokenConfig.validateToken(tokens);
-        if(validateToken){
+        String accessToken = tokens.get("accessToken");
+        boolean accessTokenIsValidate = tokenConfig.validateToken(accessToken);
+
+        if(accessTokenIsValidate){
             BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
             boardRepository.deleteById(boardEntity.getId());
             return true;
         }
-        else return false;
+        return false;
     }
 
     @Override

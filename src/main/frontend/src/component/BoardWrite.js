@@ -10,6 +10,8 @@ export default function BoardWrite() {
     const [category, setCategory1] = useState("자유게시판");
     const boardNum = useParams();
     const [data, setData] = useState();
+    const myInfo = document.cookie.split(';')
+    const userNickname = myInfo[0].split('=')[1]
 
     useEffect(() => {
         axios.get("/api/board/write", {
@@ -29,7 +31,7 @@ export default function BoardWrite() {
     const toSubmit = () => { // 글 저장을 위한 함수
         const title = ref1.current.value,
             content = ref3.current.value,
-            author = window.sessionStorage.getItem("ID"),
+            author =userNickname,
             ret = window.confirm("등록하시겠습니까?")
 
         if (ret) {

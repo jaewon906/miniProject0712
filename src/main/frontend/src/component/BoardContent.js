@@ -25,7 +25,7 @@ export default function BoardContent() {
 
             })
             .catch()
-    }, [])
+    }, [boardId.id])
     const toModify = () => { // 수정 페이지로 이동
         window.location.href = "/write/" + boardId.id
     }

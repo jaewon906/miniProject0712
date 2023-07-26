@@ -3,13 +3,17 @@ package com.project0712.Member;
 import com.project0712.Auth.TokenConfig;
 import com.project0712.Auth.TokenDTO;
 import com.project0712.Common.CookieConfig;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.UnsupportedEncodingException;
 
 
 @RestController
@@ -47,26 +51,37 @@ public class MemberController {
     }
 
     @GetMapping("/api/logIn") // 로그인
-    public void logInForm(MemberDTO memberDTO, HttpServletResponse response) {
+    public boolean logInForm(MemberDTO memberDTO, HttpServletResponse response) {
         TokenDTO tokenDTO = memberServiceImpl.logIn(memberDTO);
-        try{ //이 배치로 코드를 작성한 이유는 사용자의 닉네임을 쿠키로 전달하기 전에 아이디 비번 일치해서 토큰이 정상적으로 발급될 때 과정을 거친 후 쿠키에 사용자 닉네임 전송
+
+        try { //이 배치로 코드를 작성한 이유는 사용자의 닉네임을 쿠키로 전달하기 전에 아이디 비번 일치해서 토큰이 정상적으로 발급될 때 과정을 거친 후 쿠키에 사용자 닉네임 전송
             Cookie accessToken = cookieConfig.setCookie(tokenDTO.getAccessToken(), "accessToken", true, "/", 3600);
-            Cookie refreshToken = cookieConfig.setCookie(tokenDTO.getRefreshToken(), "refreshToken", true, "/", 7*24*3600);
-            Cookie memberInfo = cookieConfig.setCookie(tokenConfig.memberInfoFromJWT(tokenDTO),"nickname",false,"/",3600);
+            Cookie refreshToken = cookieConfig.setCookie(tokenDTO.getRefreshToken(), "refreshToken", true, "/", 7 * 24 * 3600);
+            Cookie userNickname = cookieConfig.setCookie(tokenConfig.memberInfoFromJWT(tokenDTO).get(0), "userNickname", false, "/", 3600);
+            Cookie userId = cookieConfig.setCookie(tokenConfig.memberInfoFromJWT(tokenDTO).get(1), "userId", false, "/", 3600);
             response.addCookie(accessToken);
             response.addCookie(refreshToken);
-//            response.addCookie(memberInfo); // 사용자의 닉네임을 쿠키로 전달
-        }catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty.", e);
-        }catch (Exception e){
-            log.error("error",e);
-        }
+            response.addCookie(userNickname); // 사용자의 닉네임을 쿠키로 전달
+            response.addCookie(userId);
+            return true;
 
+        } catch (IllegalArgumentException e) {
+            log.error("JWT claims string is empty.", e);
+        } catch (Exception e) {
+            log.error("error", e);
+        }
+        return false;
     }
 
     @PostMapping("/api/withdrawal") // 회원삭제
-    public boolean withdrawal(MemberDTO memberDTO) {
-        return memberServiceImpl.withdrawal(memberDTO);
+    public boolean withdrawal(MemberDTO memberDTO, HttpServletResponse response) {
+        boolean isDeleted = memberServiceImpl.withdrawal(memberDTO);
+        if(isDeleted){
+            String[] cookieKey = {"accessToken", "refreshToken", "userId", "userNickname"};
+            cookieConfig.deleteCookie(response, cookieKey);
+            return true;
+        }
+        return false;
     }
 
     @PostMapping("/api/findPw/modifyPassword")
@@ -74,6 +89,11 @@ public class MemberController {
         memberServiceImpl.forgotAndModifyPassword(memberDTO);
     }
 
+    @PostMapping("/api/logOut")
+    public void logOut(HttpServletResponse response) {
+        String[] cookieKey = {"accessToken", "refreshToken", "userId", "userNickname"};
+        cookieConfig.deleteCookie(response, cookieKey);
+    }
 
 
 }

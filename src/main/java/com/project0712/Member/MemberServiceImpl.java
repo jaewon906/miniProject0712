@@ -2,8 +2,6 @@ package com.project0712.Member;
 
 import com.project0712.Auth.TokenConfig;
 import com.project0712.Auth.TokenDTO;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -30,9 +28,10 @@ public class MemberServiceImpl implements MemberService {
                 memberRepository.deleteAllByUserId(allByUserId.get().getUserId());
                 return true;
             }
+            else return false;
 
         }
-        return false;
+        else return false;
     }
 
     @Override

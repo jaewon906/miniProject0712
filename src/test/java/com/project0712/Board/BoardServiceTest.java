@@ -1,5 +1,7 @@
 package com.project0712.Board;
 
+import com.project0712.Auth.TokenConfig;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,9 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BoardServiceTest {
 
     private final BoardRepository boardRepository;
+
     @Test
     public void 게시글저장() throws Exception {
         BoardDTO boardDTO = new BoardDTO();
@@ -79,4 +80,6 @@ public class BoardServiceTest {
         Page<BoardDTO> map = boardEntityPage.map(entity -> new BoardDTO());
         assertEquals(50,map.getSize());
     }
+
+
 }

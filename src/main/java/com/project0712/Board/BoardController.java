@@ -3,6 +3,7 @@ package com.project0712.Board;
 import com.project0712.Common.CookieConfig;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -49,7 +50,7 @@ public class BoardController {
     }
 
     @PostMapping("/api/board/deletePost") //게시글 삭제
-    public boolean deletePost(BoardDTO boardDTO, HttpServletRequest request) { // 게시글 삭제
+    public boolean deletePost(BoardDTO boardDTO, HttpServletRequest request, HttpServletResponse response) { // 게시글 삭제
         Map<String, String> tokens = cookieConfig.requestCookie(request);
         return boardServiceImpl.deletePost(boardDTO, tokens);
     }

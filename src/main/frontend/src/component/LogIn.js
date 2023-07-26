@@ -1,13 +1,13 @@
 import style from "../css/logIn.module.css"
 import axios from "axios";
-import {useRef, useState} from "react";
+import {useRef} from "react";
 import {Link} from "react-router-dom";
 
 export default function LogIn() {
 
     const id = useRef();
     const password = useRef();
-    const [myAccount, setMyAccount] = useState();
+
 
     const toLogIn = () => {
         axios.get("/api/logIn", {
@@ -16,12 +16,12 @@ export default function LogIn() {
                 userPassword: password.current.value,
             }
         })
-            .then(res => {setMyAccount(res.data)
-                window.sessionStorage.setItem("key","ss");
-                // window.location.href = "/"
+            .then(() => {
+                window.location.href = "/"
             })
             .catch(err => {
                 alert("아이디 또는 비밀번호가 잘못되었습니다.")
+                console.error(err)
             })
 
     }
