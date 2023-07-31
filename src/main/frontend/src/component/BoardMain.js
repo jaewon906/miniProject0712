@@ -50,7 +50,7 @@ export default function BoardMain() {
                 setCategoryTemp("전체게시판")
         }
 
-    }, [urlParams.id, pages, size]) //url의 id부분과 게시판 개수 변경 버튼을 누를때 마다 렌더링 실행
+    }, [urlParams.id, pages, size, urlQuery]) //url의 id부분과 게시판 개수 변경 버튼을 누를때 마다 렌더링 실행
 
     const boardAmount = (e) => {       // 게시글 개수 조절
 
@@ -165,6 +165,7 @@ export default function BoardMain() {
                         if (categoryTemp === el.category) {
                             sortedList[j++] = el;
                         }
+                        return null;
 
                     }) : searchResult.map(el => {
 
@@ -174,7 +175,7 @@ export default function BoardMain() {
                         if (categoryTemp === el.category) {
                             sortedList[j++] = el;
                         }
-
+                        return null;
                     })}
                     {sortedList.map(el => {
                         let yyyy = "";

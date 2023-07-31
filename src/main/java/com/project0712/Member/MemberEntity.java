@@ -4,6 +4,11 @@ import com.project0712.Common.TimeBaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.lang.reflect.Member;
 
 @Entity
 @Getter
@@ -29,16 +34,27 @@ public class MemberEntity extends TimeBaseEntity {
     private String userSex;
 
     public static MemberEntity DTOToEntity(MemberDTO memberDTO){
+
         MemberEntity memberEntity = new MemberEntity();
 
         memberEntity.setId(memberDTO.getId());
         memberEntity.setUserId(memberDTO.getUserId());
-        memberEntity.setUserPassword(memberDTO.getUserPassword());
+        memberEntity.setUserPassword(BCrypt.hashpw(memberDTO.getUserPassword(),BCrypt.gensalt()));
         memberEntity.setUserNickname(memberDTO.getUserNickname());
         memberEntity.setUserEmail(memberDTO.getUserEmail());
         memberEntity.setUserTel(memberDTO.getUserTel());
         memberEntity.setUserAddress(memberDTO.getUserAddress());
         memberEntity.setUserSex(memberDTO.getUserSex());
+
+        return memberEntity;
+    }
+
+    public static MemberEntity DTOToEntityOnlyUseDuplicateValidation(MemberDTO memberDTO){
+        MemberEntity memberEntity = new MemberEntity();
+
+        memberEntity.setUserId(memberDTO.getUserId());
+        memberEntity.setUserNickname(memberDTO.getUserNickname());
+        memberEntity.setUserEmail(memberDTO.getUserEmail());
 
         return memberEntity;
     }

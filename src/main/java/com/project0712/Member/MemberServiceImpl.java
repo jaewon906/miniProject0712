@@ -4,8 +4,9 @@ import com.project0712.Auth.TokenConfig;
 import com.project0712.Auth.TokenDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +14,11 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final TokenConfig tokenConfig;
+
 
     @Override
     public boolean withdrawal(MemberDTO memberDTO) { //회원 탈퇴
@@ -24,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
         if (allByUserId.isPresent()) {
             // No EntityManager with actual transaction available for current thread 에러 -> @Transactional 어노테이션 붙히면 해결
-            if (memberDTO.getUserPassword().equals(allByUserId.get().getUserPassword())) {
+            if (BCrypt.checkpw(memberDTO.getUserPassword(),memberEntity.getUserPassword())) {
                 memberRepository.deleteAllByUserId(allByUserId.get().getUserId());
                 return true;
             }
@@ -41,7 +44,7 @@ public class MemberServiceImpl implements MemberService {
 
         if (allByUserId.isPresent()) {
 
-            if (memberDTO.getUserPassword().equals(allByUserId.get().getUserPassword())) {
+            if (BCrypt.checkpw(memberDTO.getUserPassword(),memberEntity.getUserPassword())) {
                 MemberDTO entityToDTO = MemberDTO.EntityToDTO(allByUserId.get());
                 return tokenConfig.generateToken(entityToDTO);
             } else {
@@ -54,17 +57,23 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void save(MemberDTO memberDTO) { // 회원가입
         //유일해야 하는것 : id, 닉네임, 이메일
-        Optional<MemberEntity> foundUser = memberRepository.findByuserId
-                (memberDTO.getUserId());
 
-        if (foundUser.isEmpty()) {
-            memberRepository.save(MemberEntity.DTOToEntity(memberDTO));
+        try{
+            Optional<MemberEntity> foundUser = memberRepository.findByuserId
+                    (memberDTO.getUserId());
+
+            if (foundUser.isEmpty()) {
+                memberRepository.save(MemberEntity.DTOToEntity(memberDTO));
+            }
+        }catch (RuntimeException e){
+            log.error("회원가입 양식에 문제가 있습니다.",e);
         }
+
     }
 
     @Override
     public String validateDuplicatedId(MemberDTO memberDTO) {
-        MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
+        MemberEntity memberEntity = MemberEntity.DTOToEntityOnlyUseDuplicateValidation(memberDTO);
         Optional<MemberEntity> byuserId = memberRepository.findByuserId(memberEntity.getUserId());
 
         if(byuserId.isPresent()) return "아이디가 중복됩니다.";
@@ -74,7 +83,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String validateDuplicatedNickname(MemberDTO memberDTO) {
-        MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
+        MemberEntity memberEntity = MemberEntity.DTOToEntityOnlyUseDuplicateValidation(memberDTO);
         Optional<MemberEntity> byuserNickname = memberRepository.findByuserNickname(memberEntity.getUserNickname());
 
         if(byuserNickname.isPresent()) return "닉네임이 중복됩니다.";
@@ -84,7 +93,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String validateDuplicatedEmail(MemberDTO memberDTO) {
-        MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
+        MemberEntity memberEntity = MemberEntity.DTOToEntityOnlyUseDuplicateValidation(memberDTO);
         Optional<MemberEntity> byuserEmail = memberRepository.findByuserEmail(memberEntity.getUserEmail());
 
         if(byuserEmail.isPresent()) return "이메일이 중복됩니다.";

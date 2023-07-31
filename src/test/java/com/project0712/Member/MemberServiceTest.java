@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestConstructor;
 
 
@@ -62,21 +64,23 @@ public class MemberServiceTest {
     @Test
     public void 로그인_서비스() {
         MemberDTO memberDTO = new MemberDTO();
-        memberDTO.setUserId("ploi9");
+        memberDTO.setUserId("재원씨");
         memberDTO.setUserNickname("1111");
         memberDTO.setUserEmail("1");
+        memberDTO.setUserPassword("1234");
 
         tokenConfig.generateToken(memberDTO);
 
-
-//        assertEquals("", token);
-        assertEquals("", tokenConfig.generateToken(memberDTO));
 
         MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
         Optional<MemberEntity> allByUserId = memberRepository.findByuserId(memberEntity.getUserId());
         assertEquals(memberDTO.getUserId(), allByUserId.get().getUserId());
 
-        assertEquals(memberDTO.getUserPassword(), allByUserId.get().getUserPassword());
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+        assertEquals("",allByUserId.get().getUserPassword());
+        boolean matches = passwordEncoder.matches(memberDTO.getUserPassword(), allByUserId.get().getUserPassword());
+        assertTrue(matches);
 
         if (allByUserId.isPresent()) {
 

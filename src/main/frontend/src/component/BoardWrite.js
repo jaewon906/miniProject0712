@@ -22,10 +22,9 @@ export default function BoardWrite() {
         })
             .then(res => {
                 setData(res.data)
-                console.log(res.data)
             })
             .catch()
-    }, [setData])
+    }, [setData,boardNum.id])
 
 
     const toSubmit = () => { // 글 저장을 위한 함수
@@ -51,10 +50,15 @@ export default function BoardWrite() {
                         hit: data.hit
                     }
                 })
-                    .then(res => res.data) // res.data는 스프링에서 @PostMapping에 해당하는 메서드의 리턴값
-                    .catch(err => console.error(err))
-                alert("등록되었습니다.")
-                window.location.href = "/board";
+                    .then(res => {
+                        alert("등록되었습니다.")
+                        window.location.href = "/board";
+                    }) // res.data는 스프링에서 @PostMapping에 해당하는 메서드의 리턴값
+                    .catch(err => {
+                        alert("잠시후에 다시 시도해주세요");
+                        console.error(err);
+                    })
+
             }
         }
     }

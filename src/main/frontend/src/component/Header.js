@@ -36,7 +36,7 @@ export default function Header() {
                     <a onClick={toLogOut}>로그아웃</a> :
                     <Link to="/logIn">로그인</Link>}
                 <p style={{margin: "0px 20px"}}></p>
-                <Link to="withdrawal">회원 탈퇴하기</Link>
+                {myNickname ? <Link to="withdrawal">회원 탈퇴하기</Link>:""}
             </div>
         </div>
     )

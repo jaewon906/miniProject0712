@@ -47,10 +47,7 @@ export default function SignUp() {
             .catch()
     }
     const toSignUp = () => {
-        if(idState.length===0 && nicknameState.length===0 && emailState.length===0){
-            const ret = window.confirm("등록하시겠습니까?")
-            if(ret){
-                alert("회원가입이 완료되었습니다.")
+
                 axios.post("/api/signUp", null, {
                     params: {
                         userId: id.current.value,
@@ -62,17 +59,16 @@ export default function SignUp() {
                         userSex: sex.current[0].value,
                     }
                 })
-                    .then(res => res.data)
+                    .then(() => {
+                        const ret = window.confirm("등록하시겠습니까?")
+
+                        if(ret){
+                            alert("회원가입이 완료되었습니다.")
+                            window.location.href="/"
+                        }
+                    })
                     .catch(err => console.error(err))
-            }
 
-
-
-            window.location.href="/"
-        }
-        else{
-            alert("회원가입 양식을 다시 확인해주세요")
-        }
 
     }
 

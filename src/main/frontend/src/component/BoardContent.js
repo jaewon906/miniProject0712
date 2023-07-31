@@ -9,6 +9,8 @@ export default function BoardContent() {
     const [category, setCategory] = useState();
     const [content, setContent] = useState();
     const [author, setAuthor] = useState();
+    const myInfo = document.cookie.split(';')
+    const userNickname = myInfo[0].split('=')[1]
 
 
     useEffect(() => {
@@ -68,10 +70,10 @@ export default function BoardContent() {
                     <div>{content}</div>
                 </div>
                 <div style={{marginTop: "50px", width: "50%", display: "flex", justifyContent: "space-evenly"}}>
-                    {author === window.sessionStorage.getItem("ID") ?
+                    {author === userNickname ?
                         <button style={{width: "120px"}} onClick={toModify} className={style.toWriteBtn}
                                 type="button">수정하기</button> : ""}
-                    {author === window.sessionStorage.getItem("ID") ?
+                    {author === userNickname ?
                         <button style={{width: "120px"}} onClick={toDelete} className={style.toWriteBtn}
                                 type="button">삭제하기</button> : ""}
                 </div>

@@ -10,14 +10,20 @@ export default function LogIn() {
 
 
     const toLogIn = () => {
+
         axios.get("/api/logIn", {
             params: {
                 userId: id.current.value,
                 userPassword: password.current.value,
             }
         })
-            .then(() => {
-                window.location.href = "/"
+            .then((res) => {
+                if(res.data){
+                    window.location.href = "/"
+                }
+                else{
+                    alert("잠시후 다시 시도해주세요")
+                }
             })
             .catch(err => {
                 alert("아이디 또는 비밀번호가 잘못되었습니다.")

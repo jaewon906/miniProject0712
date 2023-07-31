@@ -1,6 +1,6 @@
 import style from "../css/logIn.module.css"
 import axios from "axios";
-import {useRef, useState} from "react";
+import {useRef} from "react";
 
 export default function Withdrawal() {
 

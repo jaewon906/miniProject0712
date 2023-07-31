@@ -3,7 +3,6 @@ package com.project0712.Member;
 import com.project0712.Auth.TokenConfig;
 import com.project0712.Auth.TokenDTO;
 import com.project0712.Common.CookieConfig;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,46 +10,47 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
 
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api/")
 public class MemberController {
 
     private final MemberServiceImpl memberServiceImpl;
     private final TokenConfig tokenConfig;
     private final CookieConfig cookieConfig;
 
-    @PostMapping("/api/signUp")
+    @PostMapping("signUp")
     public void signUp(MemberDTO memberDTO) {
         memberServiceImpl.save(memberDTO);
     }
 
-    @GetMapping("/api/signUp")
+    @GetMapping("signUp")
     public MemberDTO sendMemberInfoToFrontend(MemberDTO memberDTO) {
         return memberDTO;
     }
 
-    @GetMapping("/api/signUp/id")
+    @GetMapping("signUp/id")
     public String validateId(MemberDTO memberDTO) {
         return memberServiceImpl.validateDuplicatedId(memberDTO);
     }
 
-    @GetMapping("/api/signUp/nickname")
+    @GetMapping("signUp/nickname")
     public String validateNickname(MemberDTO memberDTO) {
         return memberServiceImpl.validateDuplicatedNickname(memberDTO);
     }
 
-    @GetMapping("/api/signUp/email")
+    @GetMapping("signUp/email")
     public String validateEmail(MemberDTO memberDTO) {
         return memberServiceImpl.validateDuplicatedEmail(memberDTO);
     }
 
-    @GetMapping("/api/logIn") // 로그인
+    @GetMapping("logIn") // 로그인
     public boolean logInForm(MemberDTO memberDTO, HttpServletResponse response) {
         TokenDTO tokenDTO = memberServiceImpl.logIn(memberDTO);
 
@@ -73,7 +73,7 @@ public class MemberController {
         return false;
     }
 
-    @PostMapping("/api/withdrawal") // 회원삭제
+    @PostMapping("withdrawal") // 회원삭제
     public boolean withdrawal(MemberDTO memberDTO, HttpServletResponse response) {
         boolean isDeleted = memberServiceImpl.withdrawal(memberDTO);
         if(isDeleted){
@@ -84,12 +84,12 @@ public class MemberController {
         return false;
     }
 
-    @PostMapping("/api/findPw/modifyPassword")
+    @PostMapping("findPw/modifyPassword")
     public void forgotAndModifyPassword(MemberDTO memberDTO) {
         memberServiceImpl.forgotAndModifyPassword(memberDTO);
     }
 
-    @PostMapping("/api/logOut")
+    @PostMapping("logOut")
     public void logOut(HttpServletResponse response) {
         String[] cookieKey = {"accessToken", "refreshToken", "userId", "userNickname"};
         cookieConfig.deleteCookie(response, cookieKey);
