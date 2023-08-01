@@ -1,8 +1,6 @@
 package com.project0712.Member;
 
 import com.project0712.Auth.TokenDTO;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 
 import java.util.List;
 

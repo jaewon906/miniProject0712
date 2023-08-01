@@ -13,8 +13,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j // 로깅(logging)기능
@@ -83,7 +81,7 @@ public class EmailServiceImpl implements EmailService {
     public MemberDTO sendIdAndEmailAndVerificationCode(EmailDTO emailDTO) {
         EmailEntity emailEntity = EmailEntity.DTOToEntity(emailDTO);
         Optional<EmailEntity> ByuserEmail = emailRepository.findByuserEmail(emailEntity.getUserEmail()); //해당하는 이메일 찾기
-        MemberEntity memberEntity= memberRepository.findByuserEmail(ByuserEmail.get().getUserEmail()).get(); //해당하는 이메일의 PK값 찾기
+        MemberEntity memberEntity = memberRepository.findByuserEmail(ByuserEmail.get().getUserEmail()).get(); //해당하는 이메일의 PK값 찾기
 
 
         if (ByuserEmail.get().getUserId().equals(emailEntity.getUserId())) { //이메일이 존재하고 ID가 일치할 때

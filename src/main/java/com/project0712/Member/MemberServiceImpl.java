@@ -27,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
         if (allByUserId.isPresent()) {
             // No EntityManager with actual transaction available for current thread 에러 -> @Transactional 어노테이션 붙히면 해결
-            if (BCrypt.checkpw(memberDTO.getUserPassword(),memberEntity.getUserPassword())) {
+            if (BCrypt.checkpw(memberDTO.getUserPassword(), memberEntity.getUserPassword())) {
                 memberRepository.deleteAllByUserId(allByUserId.get().getUserId());
                 return true;
             }
@@ -44,7 +44,7 @@ public class MemberServiceImpl implements MemberService {
 
         if (allByUserId.isPresent()) {
 
-            if (BCrypt.checkpw(memberDTO.getUserPassword(),memberEntity.getUserPassword())) {
+            if (BCrypt.checkpw(memberDTO.getUserPassword(), memberEntity.getUserPassword())) {
                 MemberDTO entityToDTO = MemberDTO.EntityToDTO(allByUserId.get());
                 return tokenConfig.generateToken(entityToDTO);
             } else {

@@ -1,99 +1,95 @@
-package com.project0712.Auth;
-
-import com.project0712.Board.BoardDTO;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
-@EnableWebSecurity
-@Component
-@RequiredArgsConstructor
-public class SecurityConfig extends WebSecurityConfiguration {
-    private final UserDetailsService userDetailsService;
-    private final TokenConfig tokenConfig;
-
-    protected SecurityFilterChain configure(HttpSecurity http, AuthenticationManager authenticationManager, Authentication authentication) throws Exception {
-
-        authenticationManager.authenticate(authentication);
-
-        http.csrf(CSRF_protection -> {
-            try {
-                CSRF_protection
-                        .disable()
-                        .authorizeHttpRequests(authorize -> {
-                            authorize // «ÿ¥Á«œ¥¬ url ≈ÎΩ≈Ω√ ¿Œ¡ı ø‰±∏
-                                    .requestMatchers("/api/board/**").authenticated() // ±€ ∞¸∑√ ±‚¥…µÓ (crud)
-                                    .requestMatchers("/api/withdrawal").authenticated() //»∏ø¯≈ª≈
-                                    .anyRequest().permitAll(); //≥™∏”¡ˆ ≈ÎΩ≈¿∫ ∑Œ±◊¿Œ¿ª «œ¡ˆæ æ∆µµ µ 
-                        })
-                        .httpBasic(Customizer.withDefaults())
-                        .formLogin(form -> {
-                            form
-                                    .loginPage("/logIn")
-                                    .loginProcessingUrl("/logIn")
-                                    .successForwardUrl("/")
-                                    .failureForwardUrl("/logIn")
-                                    .permitAll();
-                        })
-                        .rememberMe(Customizer.withDefaults());
-            } catch (Exception e) {
-
-                throw new RuntimeException(e);
-            }
-        });
-        return http.build();
-    }
-
-
-    public AuthenticationManager authenticationManager() {
-        return null;
-    }
-
-
-    public Authentication authentication(HttpServletRequest request, BoardDTO boardDTO) {
-        Cookie[] cookies = request.getCookies();
-        Map<String, String> tokens = new HashMap<>();
-        for (Cookie cookie : cookies) {
-            switch (cookie.getName()) {
-                case "accessToken", "refreshToken" -> tokens.put(cookie.getName(), cookie.getValue());
-            }
-        }
-
-        String tokenState = tokenConfig.TokenRegenerator(tokens, boardDTO);
-
-        if (tokenState.equals("pass")) {
-//            ¿Œ¡ı º∫∞¯
-        }
-        if (tokenState.equals("fail")) {
-//            ¿Œ¡ı Ω«∆–
-        }
-
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        return new BCryptPasswordEncoder();
+//package com.project0712.Auth;
+//
+//import com.project0712.Board.BoardDTO;
+//import jakarta.servlet.http.Cookie;
+//import jakarta.servlet.http.HttpServletRequest;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.authentication.AuthenticationManager;
+//import org.springframework.security.config.Customizer;
+//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+//import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetailsService;
+//import org.springframework.security.web.SecurityFilterChain;
+//import org.springframework.stereotype.Component;
+//
+//import java.util.ArrayList;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//
+//
+//@EnableWebSecurity
+//@Component
+//@RequiredArgsConstructor
+//public class SecurityConfig extends WebSecurityConfiguration {
+//    private final UserDetailsService userDetailsService;
+//    private final TokenConfig tokenConfig;
+//
+//    protected SecurityFilterChain configure(HttpSecurity http, AuthenticationManager authenticationManager, Authentication authentication) throws Exception {
+//
+//        authenticationManager.authenticate(authentication);
+//
+//        http.csrf(CSRF_protection -> {
+//            try {
+//                CSRF_protection
+//                        .disable()
+//                        .authorizeHttpRequests(authorize -> {
+//                            authorize // Ìï¥ÎãπÌïòÎäî url ÌÜµÏã†Ïãú Ïù∏Ï¶ù ÏöîÍµ¨
+//                                    .requestMatchers("/api/board/**").authenticated() // Í∏Ä Í¥ÄÎ†® Í∏∞Îä•Îì± (crud)
+//                                    .requestMatchers("/api/withdrawal").authenticated() //ÌöåÏõêÌÉàÌá¥
+//                                    .anyRequest().permitAll(); //ÎÇòÎ®∏ÏßÄ ÌÜµÏã†ÏùÄ Î°úÍ∑∏Ïù∏ÏùÑ ÌïòÏßÄÏïäÏïÑÎèÑ Îê®
+//                        })
+//                        .httpBasic(Customizer.withDefaults())
+//                        .formLogin(AbstractHttpConfigurer::disable) //disable -> ÏÑ∏ÏÖòÍ∏∞Î∞ò Î°úÍ∑∏Ïù∏Ïù¥ ÏïÑÎãå Îã§Î•∏ Î°úÍ∑∏Ïù∏ Î∞©Ïãù
+//                        .rememberMe(Customizer.withDefaults());
+//            } catch (Exception e) {
+//
+//                throw new RuntimeException(e);
+//            }
+//        });
+//        return http.build();
 //    }
-        return null;
-    }
-
-
-}
+//
+//
+//    public AuthenticationManager authenticationManager() {
+//        return null;
+//    }
+//
+//
+//    public Authentication authentication(HttpServletRequest request, BoardDTO boardDTO) {
+//        Cookie[] cookies = request.getCookies();
+//        Map<String, String> tokens = new HashMap<>();
+//        for (Cookie cookie : cookies) {
+//            switch (cookie.getName()) {
+//                case "accessToken", "refreshToken" -> tokens.put(cookie.getName(), cookie.getValue());
+//            }
+//        }
+//
+//        String tokenState = tokenConfig.TokenRegenerator(tokens, boardDTO);
+//
+//        if (tokenState.equals("pass")) {
+////            Ïù∏Ï¶ù ÏÑ±Í≥µ
+//        }
+//        if (tokenState.equals("fail")) {
+////            Ïù∏Ï¶ù Ïã§Ìå®
+//        }
+//
+//
+////    @Bean
+////    public PasswordEncoder passwordEncoder(){
+////        return new BCryptPasswordEncoder();
+////    }
+//        return null;
+//    }
+//
+//
+//
+//
+//}

@@ -1,8 +1,10 @@
 package com.project0712.Member;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -17,6 +19,7 @@ public class MemberDTO {
     private String userTel; //전화번호
     private String userAddress; //주소
     private String userSex; //성별
+
 
     public static MemberDTO EntityToDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO = new MemberDTO();
