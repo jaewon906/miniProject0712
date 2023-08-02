@@ -1,7 +1,10 @@
-package com.project0712.Auth;
+package com.project0712.Security;
 
-import io.jsonwebtoken.lang.Assert;
+import com.nimbusds.jwt.SignedJWT;
+import com.nimbusds.oauth2.sdk.auth.ClientAuthenticationMethod;
+import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,14 +25,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @RequiredArgsConstructor
 public class ProviderManager실험 implements AuthenticationManager {
+
     @Test
+    @DisplayName("구현완료")
     public void 시큐리티컨텍스트구현해보기() {
         SecurityContext context = SecurityContextHolder.createEmptyContext(); // 빈 객체 생성
         Authentication authentication = new TestingAuthenticationToken("박재원", "1234", "ROLE_USER"); //인증 토큰 만듬
@@ -39,7 +43,6 @@ public class ProviderManager실험 implements AuthenticationManager {
         SecurityContextHolder.setContext(context); //코인을 넣은 컨텍스트를 컨텍스트홀더에 넣음
 
         SecurityContext result = SecurityContextHolder.getContext(); //[Principal=박재원, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]]>
-
 
     }
 
@@ -78,5 +81,11 @@ class UserDetailServiceImpl implements UserDetailsService {
         User user = new User("아디", "비번",authorities);
         authorities.stream();
         return null;
+    }
+}
+
+class JwtAuthenticationImpl extends JWTAuthentication{
+    protected JwtAuthenticationImpl(ClientAuthenticationMethod method, SignedJWT clientAssertion) {
+        super(method, clientAssertion);
     }
 }

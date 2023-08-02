@@ -1,7 +1,7 @@
 package com.project0712.Member;
 
-import com.project0712.Auth.TokenConfig;
-import com.project0712.Auth.TokenDTO;
+import com.project0712.Security.TokenConfig;
+import com.project0712.Security.TokenDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
@@ -21,6 +20,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
+    @Transactional
     public boolean withdrawal(MemberDTO memberDTO) { //회원 탈퇴
         MemberEntity memberEntity = MemberEntity.DTOToEntity(memberDTO);
         Optional<MemberEntity> allByUserId = memberRepository.findByuserId(memberEntity.getUserId());
@@ -63,6 +63,7 @@ public class MemberServiceImpl implements MemberService {
                     (memberDTO.getUserId());
 
             if (foundUser.isEmpty()) {
+                memberDTO.setRole(MemberRole.USER); // 일반 유저 권한 부여
                 memberRepository.save(MemberEntity.DTOToEntity(memberDTO));
             }
         }catch (RuntimeException e){

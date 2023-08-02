@@ -1,4 +1,4 @@
-package com.project0712.Auth;
+package com.project0712.Security;
 
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;

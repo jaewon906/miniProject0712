@@ -1,6 +1,6 @@
 package com.project0712.Member;
 
-import com.project0712.Auth.TokenDTO;
+import com.project0712.Security.TokenDTO;
 
 import java.util.List;
 

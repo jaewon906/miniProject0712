@@ -61,10 +61,6 @@ public class BoardController {
 
     @GetMapping("board") // 페이징 기능 + 게시판 들어갈 때 자동으로 게시글 띄움
     public Page<BoardDTO> paging(@PageableDefault(value = 1) Pageable pageable, HttpServletRequest request) throws ServletException {
-        Cookie[] cookies = request.getCookies();
-        for (int i = 0; i < cookies.length; i++) {
-            System.out.println(Arrays.toString(cookies));
-        }
         return boardServiceImpl.paging(pageable);
     }
 

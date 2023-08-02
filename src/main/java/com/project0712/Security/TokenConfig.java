@@ -1,4 +1,4 @@
-package com.project0712.Auth;
+package com.project0712.Security;
 
 import com.project0712.Board.BoardDTO;
 import com.project0712.Member.MemberDTO;
@@ -31,7 +31,7 @@ public class TokenConfig {
         long accessTokenExpireDate = 60L * 60 * 1000; //60분
         long refreshTokenExpireDate = 7L * 24 * 60 * 60 * 1000; //7일
 
-        Key key = Keys.hmacShaKeyFor(AuthDTO.secretKeyToByte);
+        Key key = Keys.hmacShaKeyFor(SecretKey.secretKeyToByte);
 
         String accessToken = Jwts.builder()
                 .setHeaderParam("type", "accessToken")
@@ -76,7 +76,7 @@ public class TokenConfig {
         Date currentTime = new Date(System.currentTimeMillis());
         long accessTokenExpireDate = 60L * 60 * 1000; //60분
 
-        Key key = Keys.hmacShaKeyFor(AuthDTO.secretKeyToByte);
+        Key key = Keys.hmacShaKeyFor(SecretKey.secretKeyToByte);
 
         Optional<MemberEntity> byUserId = memberRepository.findByuserId(boardDTO.getAuthor());
 
@@ -119,7 +119,7 @@ public class TokenConfig {
     }
 
     public boolean validateToken(String token) { //토큰 검증
-        Key key = Keys.hmacShaKeyFor(AuthDTO.secretKeyToByte);
+        Key key = Keys.hmacShaKeyFor(SecretKey.secretKeyToByte);
         try {
             //서블릿 요청으로부터 가져온 accessToken에 있는 인증키와 해당 인증키와 비교해서 검증하는 과정
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

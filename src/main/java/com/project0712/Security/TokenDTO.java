@@ -1,4 +1,4 @@
-package com.project0712.Auth;
+package com.project0712.Security;
 
 import lombok.Builder;
 import lombok.Getter;

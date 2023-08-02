@@ -1,6 +1,7 @@
 package com.project0712.Board;
 
 import com.project0712.Common.TimeBaseEntity;
+import com.project0712.Member.MemberEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import lombok.Setter;
 public class BoardEntity extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "board_id")
     private Long id; //pk
     @Column(nullable = false,length = 100)
     private String title; //게시글 제목
@@ -25,6 +27,10 @@ public class BoardEntity extends TimeBaseEntity {
     private int hit; // 조회수
     @Column
     private int boardLikes; //좋아요
+
+    @ManyToOne(fetch = FetchType.LAZY) //Eager = 연관관계 있는 엔티티들 모두 가져올때 (근데 거의안씀) / Lazy = getter로 가져올 때
+    @JoinColumn(name = "member_id")//@JoinColumn 어노테이션은 외래 키를 매핑할 때 사용하는 어노테이션, 이름 지정을 위해 쓰이며 생략가능
+    private MemberEntity memberEntity;
 
     public static BoardEntity DTOtoEntity(BoardDTO boardDTO) {
         BoardEntity boardEntity = new BoardEntity();

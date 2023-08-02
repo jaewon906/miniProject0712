@@ -1,10 +1,8 @@
 package com.project0712.Board;
 
-import com.project0712.Auth.TokenConfig;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.project0712.Security.TokenConfig;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.server.Cookie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -24,6 +22,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void save(BoardDTO boardDTO) { //글 저장
+        //로그인한 사용자에 해당하는 pk값을 가져오고 boardEntity에 저장하는 로직 작성예정
         BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
         boardRepository.save(boardEntity);
     }

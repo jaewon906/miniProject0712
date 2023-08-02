@@ -19,7 +19,7 @@ public class MemberDTO {
     private String userTel; //전화번호
     private String userAddress; //주소
     private String userSex; //성별
-
+    private MemberRole role; //권한
 
     public static MemberDTO EntityToDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO = new MemberDTO();

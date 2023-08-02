@@ -1,7 +1,7 @@
 package com.project0712.Member;
 
-import com.project0712.Auth.TokenConfig;
-import com.project0712.Auth.TokenDTO;
+import com.project0712.Security.TokenConfig;
+import com.project0712.Security.TokenDTO;
 import com.project0712.Common.CookieConfig;
 import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;

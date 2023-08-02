@@ -31,3 +31,14 @@
 ##### 2) 제공 받은 서버는 각 토큰의 유효성을 검증, 검증이 완료되었다면 권한을 부여 (근데 권한을 사용자의 어디로 부여할지를 모름)
 ##### 
 ### 12. 스프링 리액트 통합 빌드 o
+### 로그인이 성공하면 JWT token을 부여하는 방식으로 진행하겠습니다.
+
+아래는 login 요청이 들어왔을 때의 절차 입니다.
+
+요청이 들어오면 AbstractAuthenticationProcessingFilter에 들어가게 됩니다.
+그 다음 filter의 attemptAuthenticationg메소드를 통해 유저의 정보가 담긴 Authentication객체(인증 전)를 AuthenticationManager에 전달합니다.
+Authentication객체는 UsernamePasswordAuthenticationToken을 통해 만듭니다.
+내부적으로 Spring Security의 ProviderManager를 통해 적잘한 AuthenticationProvider를 찾습니다.
+AuthenticationProvider의 authenticate메소드로 인증을 진행합니다.
+인증에 성공했다면 성공한 Authentication객체(인증 후)를 filter에 다시 반환해 authenticationSuccessHandler를 수행합니다.
+authenticationSuccessHandler를 통해 jwt token을 발급하고 response를 채워줍니다.
