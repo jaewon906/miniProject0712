@@ -5,7 +5,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +21,11 @@ import java.util.List;
 
 // 매번 인증을 해야되기 때문에 OncePerRequestFilter로 처리
 @Slf4j
+@RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+
+    private final TokenConfig tokenConfig;
+    private final ModelMapper modelMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -27,26 +33,27 @@ public class JwtFilter extends OncePerRequestFilter {
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         log.info("authorization : {}",authorization);
 
+        String username="wodnjs";
+        String password="asdf";
+
         //token
-        if(authorization==null || !authorization.startsWith("Bearer ")){
-            log.error("authorization is null");
+        if(authorization==null || authorization.equals("")){
+            log.error("No authorization");
             filterChain.doFilter(request,response);
-            return;
         }
 
-        //토큰꺼내기
+        else{
+            boolean validateToken = tokenConfig.validateToken(authorization);
+            if (validateToken){
 
-        //Username을 토큰에서 꺼내오기
-        String userName = "";
-        Key secretKey = Keys.hmacShaKeyFor(SecretKey.secretKeyToByte);
+                String map = modelMapper.map(MemberRole.USER, String.class);
 
-        //권한 부여
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userName,"", List.of(new SimpleGrantedAuthority("USER")));
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password, List.of(new SimpleGrantedAuthority(map)));
 
-        //Detail을 넣어준다.
-        token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(token);
-
-        filterChain.doFilter(request,response);
+                token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(token);
+                filterChain.doFilter(request,response);
+            }
+        }
     }
 }
