@@ -10,14 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.util.Assert;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 
 // @Controller는 주로 view를 반환하기 위해 사용
@@ -54,9 +49,8 @@ public class BoardController {
     }
 
     @PostMapping("board/deletePost") //게시글 삭제
-    public boolean deletePost(BoardDTO boardDTO, HttpServletRequest request, HttpServletResponse response) { // 게시글 삭제
-        Map<String, String> tokens = cookieConfig.requestCookie(request);
-        return boardServiceImpl.deletePost(boardDTO, tokens);
+    public boolean deletePost(BoardDTO boardDTO) { // 게시글 삭제
+         return boardServiceImpl.deletePost(boardDTO);
     }
 
     @GetMapping("board") // 페이징 기능 + 게시판 들어갈 때 자동으로 게시글 띄움

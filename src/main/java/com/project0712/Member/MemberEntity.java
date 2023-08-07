@@ -2,6 +2,7 @@ package com.project0712.Member;
 
 import com.project0712.Board.BoardEntity;
 import com.project0712.Common.TimeBaseEntity;
+import com.project0712.Security.MemberRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +36,7 @@ public class MemberEntity extends TimeBaseEntity {
     @Column
     private MemberRole role;
 
-    //PK(JoinColumn)값이 NULL로 변한 자식은 고아객체라고 하여 연결된 점이 없는 객체 orphanremoval은 고아 객체를 삭제
+    //PK(JoinColumn)    값이 NULL로 변한 자식은 고아객체라고 하여 연결된 점이 없는 객체 orphanremoval은 고아 객체를 삭제
     //cascade.ALL = PERSIST(부모 자식을 한번에 영속화(DB에저장)) + REMOVE(부모 삭제시 연관된 자식도 삭제)
     @OneToMany(mappedBy = "memberEntity", cascade=CascadeType.ALL, orphanRemoval = true)
     private List<BoardEntity> boardEntity = new ArrayList<>();

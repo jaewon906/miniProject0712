@@ -2,18 +2,18 @@ package com.project0712.Board;
 
 import com.project0712.Security.TokenConfig;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.TransactionalException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
@@ -25,6 +25,7 @@ public class BoardServiceImpl implements BoardService {
         //로그인한 사용자에 해당하는 pk값을 가져오고 boardEntity에 저장하는 로직 작성예정
         BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
         boardRepository.save(boardEntity);
+        log.info("time : {}",boardEntity.getUpdatedTime());
     }
 
 
@@ -34,6 +35,7 @@ public class BoardServiceImpl implements BoardService {
         return byId.map(BoardDTO::EntityToDTO).orElse(null);
     }
 
+    @Override
     @Transactional
     public void updateHit(BoardDTO boardDTO) {
         BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
@@ -56,21 +58,22 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public boolean deletePost(BoardDTO boardDTO, Map<String, String> tokens) { //삭제 기능
-        String accessToken = tokens.get("accessToken");
-        boolean accessTokenIsValidate = tokenConfig.validateToken(accessToken);
+    @Transactional
+    public boolean deletePost(BoardDTO boardDTO) { //삭제 기능
 
-        if(accessTokenIsValidate){
             BoardEntity boardEntity = BoardEntity.DTOtoEntity(boardDTO);
-            boardRepository.deleteById(boardEntity.getId());
-            return true;
-        }
-        return false;
+            try{
+                boardRepository.updateDeleteFlag(boardEntity.getId());
+                return true;
+            }catch (TransactionalException e){
+                return false;
+            }
+
     }
 
     @Override
     public Page<BoardDTO> paging(Pageable pageable) { //페이징 기능
-        Page<BoardEntity> boardEntityPage = boardRepository.findAll(pageable);
+        Page<BoardEntity> boardEntityPage = boardRepository.findAllByDeleteFlag(pageable, "N");
         return boardEntityPage.map(BoardDTO::EntityToDTO); // BoardDTO::EntityToDTO = entity -> BoardDTO.EntityToDTO(entity)
     }
 }

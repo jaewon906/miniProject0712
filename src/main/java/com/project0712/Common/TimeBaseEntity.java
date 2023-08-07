@@ -5,6 +5,7 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class) // JPA가 엔티티의 변경 이벤트를 감지하고, 감시 정보(생성일, 수정일 등)를 자동으로 관리할 수 있게 됩니다.
 @Embeddable
 @Getter
+@Setter
 public class TimeBaseEntity {
     @CreationTimestamp // 해당 데이터를 테이블에 적용했을 때 시간을 자동으로 생성해준다
     @Column(updatable = false) // 게시판 생성시에만 시간을 생성

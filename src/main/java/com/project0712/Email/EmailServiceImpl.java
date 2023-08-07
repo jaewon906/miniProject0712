@@ -9,7 +9,10 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +23,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class EmailServiceImpl implements EmailService {
-    private final JavaMailSender javaMailSender;
+
     private final MemberRepository memberRepository;
     private final EmailRepository emailRepository;
+    private final JavaMailSender javaMailSender;
+
 
     @Override
     public void sendEmail(String email) { //해당하는 이메일로 인증코드를 보냄

@@ -1,8 +1,8 @@
 package com.project0712.Security;
 
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.security.Key;
 import java.util.List;
 
 // 매번 인증을 해야되기 때문에 OncePerRequestFilter로 처리
@@ -27,24 +26,43 @@ public class JwtFilter extends OncePerRequestFilter {
     private final TokenConfig tokenConfig;
     private final ModelMapper modelMapper;
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.info("authorization : {}",authorization);
+        String accessToken="";
+        String refreshToken="";
 
-        String username="wodnjs";
-        String password="asdf";
 
-        //token
-        if(authorization==null || authorization.equals("")){
-            log.error("No authorization");
-            filterChain.doFilter(request,response);
+        Cookie[] cookies = request.getCookies();
+        Cookie cookie1 = new Cookie("error","");
+        try{
+            for (Cookie cookie : cookies) {
+                cookie1 = cookie;
+                switch (cookie.getName()) {
+                    case "accessToken" -> accessToken=cookie.getValue();
+                    case "refreshToken" -> refreshToken=cookie.getValue();
+                }
+            }
+        }
+        catch (NullPointerException e){
+            log.error("NullPointerException",cookie1);
         }
 
-        else{
-            boolean validateToken = tokenConfig.validateToken(authorization);
-            if (validateToken){
+
+//        final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+        log.info("authorization : {}", accessToken);
+
+        String username = "w";
+        String password = "w3";
+
+        //token
+        if (accessToken == null || accessToken.equals("")) {
+            log.error("No authorization");
+            filterChain.doFilter(request, response);
+        } else {
+            boolean validateToken = tokenConfig.validateToken(accessToken);
+            if (validateToken) {
 
                 String map = modelMapper.map(MemberRole.USER, String.class);
 
@@ -52,7 +70,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(token);
-                filterChain.doFilter(request,response);
+                filterChain.doFilter(request, response);
             }
         }
     }

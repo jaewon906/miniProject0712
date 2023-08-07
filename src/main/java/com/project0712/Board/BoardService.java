@@ -13,7 +13,9 @@ public interface BoardService {
 
     List<BoardDTO> search(BoardDTO boardDTO, Pageable pageable);
 
-    boolean deletePost(BoardDTO boardDTO, Map<String, String> tokens);
+    boolean deletePost(BoardDTO boardDTO);
+
+    void updateHit(BoardDTO boardDTO);
 
     Page<BoardDTO> paging(Pageable pageable);
 }

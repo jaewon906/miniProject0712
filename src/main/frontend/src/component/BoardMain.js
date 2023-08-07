@@ -15,7 +15,7 @@ export default function BoardMain() {
     const [searchBoolean, setSearchBoolean] = useState(true)
     const [pageAttributes, setPageAttributes] = useState()
     const [pages, setPages] = useState(0)
-    const [size, setSize] = useState(10)
+    const [size, setSize] = useState(20)
 
     const urlQuery = `page=${pages}&size=${size}&sort=id,DESC`
 
@@ -23,12 +23,18 @@ export default function BoardMain() {
     let i = 0;
     let j = 0;
 
+
     useEffect(() => {
 
-        axios.get("/api/board?" + urlQuery)
+        axios.get("/api/board?" + urlQuery,{
+            headers:{
+                Authorization:"eyJ0eXBlIjoiYWNjZXNzVG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJxd2VyIiwidXNlck5pY2tuYW1lIjoi7J6s7JuQ7JSoIiwidXNlckVtYWlsIjoicGxvaTlAbmF2ZXIuY29tIiwidXNlckFkZHJlc3MiOiIxIiwidXNlclNleCI6IuuCqOyekCIsInVzZXJUZWwiOiIxLTEtMSIsImlzcyI6InF3ZXIiLCJpYXQiOjE2OTEzNzM1MDksImV4cCI6MTY5MTM3NzEwOX0.GixSZPGMlwtKuvv1oVYij-DHufpHTqPHbk3dQ-FB1CU"
+            }
+        })
             .then(res => {
                 setPageAttributes(res.data)
                 setGetBoard(res.data.content)
+
 
             })
             .catch(err => console.error(err))
@@ -111,7 +117,6 @@ export default function BoardMain() {
         page=parseInt(e.target.id)
         setPages(page)
     }
-
     return (
         <div className={style.container}>
             <div className={style.main}>

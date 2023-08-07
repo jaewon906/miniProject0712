@@ -1,5 +1,6 @@
 package com.project0712.Member;
 
+import com.project0712.Security.MemberRole;
 import com.project0712.Security.TokenConfig;
 import com.project0712.Security.TokenDTO;
 import jakarta.transaction.Transactional;

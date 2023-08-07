@@ -1,10 +1,7 @@
 package com.project0712.Member;
 
+import com.project0712.Security.MemberRole;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-
-import java.util.Collection;
 
 @Getter
 @Setter

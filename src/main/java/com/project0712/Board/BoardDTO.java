@@ -17,6 +17,7 @@ public class BoardDTO {
     private String author; // 작성자
     private int hit; // 조회수
     private int boardLikes; //좋아요
+    private String deleteFlag; //삭제 처리 대신 해당 컬럼을 활용해 삭제된 것 처럼 이용
 
     private LocalDateTime boardCreatedTime;
     private LocalDateTime boardUpdatedTime;

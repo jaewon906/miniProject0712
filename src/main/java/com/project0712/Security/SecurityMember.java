@@ -1,7 +1,6 @@
 package com.project0712.Security;
 
 import com.project0712.Member.MemberDTO;
-import com.project0712.Member.MemberRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

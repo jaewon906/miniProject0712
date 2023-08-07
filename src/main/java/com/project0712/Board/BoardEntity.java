@@ -27,8 +27,10 @@ public class BoardEntity extends TimeBaseEntity {
     private int hit; // 조회수
     @Column
     private int boardLikes; //좋아요
+    @Column
+    private String deleteFlag;
 
-    @ManyToOne(fetch = FetchType.LAZY) //Eager = 연관관계 있는 엔티티들 모두 가져올때 (근데 거의안씀) / Lazy = getter로 가져올 때
+    @ManyToOne() //Eager = 엔티티가 조회될 때 연관된 엔티티도 함께 조회(근데 거의안씀) / Lazy = 엔티티가 조회될 때는 해당 엔티티와 관련된 연관 엔티티는 로딩되지 않으며, 실제로 해당 연관 엔티티를 사용할 때 로딩
     @JoinColumn(name = "member_id")//@JoinColumn 어노테이션은 외래 키를 매핑할 때 사용하는 어노테이션, 이름 지정을 위해 쓰이며 생략가능
     private MemberEntity memberEntity;
 
@@ -42,6 +44,7 @@ public class BoardEntity extends TimeBaseEntity {
         boardEntity.setAuthor(boardDTO.getAuthor());
         boardEntity.setHit(boardDTO.getHit());
         boardEntity.setBoardLikes(boardDTO.getBoardLikes());
+        boardEntity.setDeleteFlag("N");
 
         return boardEntity;
     }

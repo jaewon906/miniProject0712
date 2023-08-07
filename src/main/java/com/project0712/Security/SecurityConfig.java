@@ -50,35 +50,4 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    public AuthenticationManager authenticationManager() {
-//        return null;
-//    }
-//
-//
-//    public Authentication authentication(HttpServletRequest request, BoardDTO boardDTO) {
-//        Cookie[] cookies = request.getCookies();
-//        Map<String, String> tokens = new HashMap<>();
-//        for (Cookie cookie : cookies) {
-//            switch (cookie.getName()) {
-//                case "accessToken", "refreshToken" -> tokens.put(cookie.getName(), cookie.getValue());
-//            }
-//        }
-//
-//        String tokenState = tokenConfig.TokenRegenerator(tokens, boardDTO);
-//
-//        if (tokenState.equals("pass")) {
-////            인증 성공
-//        }
-//        if (tokenState.equals("fail")) {
-////            인증 실패
-//        }
-//
-//
-////    @Bean
-////    public PasswordEncoder passwordEncoder(){
-////        return new BCryptPasswordEncoder();
-////    }
-//        return null;
-//    }
-
 }

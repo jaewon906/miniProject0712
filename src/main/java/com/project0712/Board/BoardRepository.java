@@ -17,5 +17,11 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     @Query(value = "update BoardEntity b set b.hit=b.hit+1 where b.id=:id")
     void updateHits(@Param("id") Long id);
 
+    @Modifying
+    @Query(value = "update BoardEntity b set b.deleteFlag='Y' where b.id=:id")
+    void updateDeleteFlag(@Param("id") Long id);
+
+    Page<BoardEntity> findAllByDeleteFlag(Pageable pageable, String deleteFlag);
+
 
 }
